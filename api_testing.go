@@ -27,10 +27,7 @@ func (a *ApiTesting) GET(t T, uri string, config *RequestConfig) *http.Response 
 	if err != nil {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+uri)
 	}
-	// copy headers
-	for k, v := range config.Headers {
-		httpReq.Header.Set(k, v)
-	}
+	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
 	resp, err := a.client.Do(httpReq)
 	a.CheckError(t, err)
@@ -44,10 +41,7 @@ func (a *ApiTesting) POST(t T, uri string, config *RequestConfig) *http.Response
 	if err != nil {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+uri)
 	}
-	// copy headers
-	for k, v := range config.Headers {
-		httpReq.Header.Set(k, v)
-	}
+	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
 	resp, err := a.client.Do(httpReq)
 	a.CheckError(t, err)
@@ -61,10 +55,7 @@ func (a *ApiTesting) PUT(t T, uri string, config *RequestConfig) *http.Response 
 	if err != nil {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+uri)
 	}
-	// copy headers
-	for k, v := range config.Headers {
-		httpReq.Header.Set(k, v)
-	}
+	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
 	resp, err := a.client.Do(httpReq)
 	a.CheckError(t, err)
@@ -78,10 +69,7 @@ func (a *ApiTesting) DELETE(t T, uri string, config *RequestConfig) *http.Respon
 	if err != nil {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+uri)
 	}
-	// copy headers
-	for k, v := range config.Headers {
-		httpReq.Header.Set(k, v)
-	}
+	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
 	resp, err := a.client.Do(httpReq)
 	a.CheckError(t, err)
@@ -185,5 +173,13 @@ func (a ApiTesting) Dump(t T, resp *http.Response) {
 		body, _ := ioutil.ReadAll(resp.Body)
 		t.Logf(string(body))
 		resp.Body.Close()
+	}
+}
+
+func copyHeaders(from, to http.Header) {
+	for k, list := range from {
+		for _, v := range list {
+			to.Set(k, v)
+		}
 	}
 }
