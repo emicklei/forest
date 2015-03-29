@@ -13,9 +13,8 @@ Example
 	var chatter = rat.NewClient("http://api.chatter.com", new(http.Client))
 
 
-
 	func TestGetMessages(t *testing.T) {
-		r := chatter.GET(t,"/v1/messages?user=zeus")
+		r := chatter.GET(t, rat.NewConfig("/v1/messages?user=zeus"))
 		chatter.ExpectStatus(t,r,200)
 		chatter.ExpectJsonArray(t,r,func(messages []interface{}){
 
@@ -33,13 +32,13 @@ If needed, implement the standard TestMain to do global setup and teardown.
 		t := rat.LoggingT
 
 		// setup
-		chatter.PUT(t, "/v1/messages/1", rat.NewRequestConfig().Body("<payload>"))
+		chatter.PUT(t, rat.NewConfig("/v1/messages/1").Body("<payload>"))
 		chatter.ExpectStatus(t,r,204)
 
 		exitCode := m.Run()
 
 		// teardown
-		chatter.DELETE(t,"/v1/messages/1")
+		chatter.DELETE(t, rat.NewConfig("/v1/messages/1"))
 		chatter.ExpectStatus(t,r,204)
 
 		os.Exit(exitCode)

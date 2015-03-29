@@ -7,19 +7,36 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 // RequestConfig holds additional information to construct a Http request.
 type RequestConfig struct {
+	Uri        string
 	BodyReader io.Reader
 	HeaderMap  http.Header
+	Values     url.Values
 }
 
-func NewRequestConfig() *RequestConfig {
+func NewConfig(staticPath string) *RequestConfig {
 	return &RequestConfig{
 		HeaderMap: http.Header{},
+		Values:    url.Values{},
+		Uri:       staticPath,
 	}
+}
+
+// format example: /v1/{param}/
+func (r *RequestConfig) Path(template string, pathparams ...interface{}) *RequestConfig {
+	// TODO parameter substitution
+	r.Uri = template
+	return r
+}
+
+func (r *RequestConfig) Query(name string, value interface{}) *RequestConfig {
+	r.Values.Add(name, fmt.Sprintf("%v", value))
+	return r
 }
 
 func (r *RequestConfig) Header(name, value string) *RequestConfig {
