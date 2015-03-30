@@ -37,7 +37,7 @@ func (a *ApiTesting) GET(t T, uri string, config *RequestConfig) *http.Response 
 // POST sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) POST(t T, uri string, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("GET", a.BaseUrl+uri, config.BodyReader)
+	httpReq, err := http.NewRequest("POST", a.BaseUrl+uri, config.BodyReader)
 	if err != nil {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+uri)
 	}
