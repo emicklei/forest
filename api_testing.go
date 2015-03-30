@@ -1,8 +1,11 @@
 package rat
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
+	"testing"
 )
 
 // ApiTesting provides functions to call a REST api and validate its responses.
@@ -32,7 +35,9 @@ func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
+	if testing.Verbose() {
+		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -46,7 +51,9 @@ func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
+	if testing.Verbose() {
+		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -60,7 +67,9 @@ func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
+	if testing.Verbose() {
+		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -74,7 +83,9 @@ func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, httpReq.Header)
+	if testing.Verbose() {
+		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -90,13 +101,25 @@ func (a ApiTesting) Dump(t T, resp *http.Response) {
 		t.Logf("empty response")
 		return
 	}
-	for k, v := range resp.Header {
-		t.Logf("%s : %v", k, v)
+	if testing.Verbose() {
+		for k, v := range resp.Header {
+			print(fmt.Sprintf("\t%s : %v\n", k, strings.Join(v, ",")))
+		}
 	}
 	if resp.Body != nil {
 		body, _ := ioutil.ReadAll(resp.Body)
-		t.Logf(string(body))
+		if testing.Verbose() {
+			print(string(body))
+		}
 		resp.Body.Close()
+	}
+}
+
+func headersString(h http.Header) string {
+	if len(h) == 0 {
+		return ""
+	} else {
+		return fmt.Sprintf("%v", h)
 	}
 }
 
