@@ -27,6 +27,13 @@ func NewConfig(staticPath string) *RequestConfig {
 	}
 }
 
+// Do calls the one-argument function parameter with the receiver.
+// This allows for custom convenience functions without breaking the fluent style.
+func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
+	block(r)
+	return r
+}
+
 // format example: /v1/{param}/
 func (r *RequestConfig) Path(template string, pathparams ...interface{}) *RequestConfig {
 	// TODO parameter substitution
