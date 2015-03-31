@@ -7,12 +7,14 @@ import (
 
 // T is the interface that this package is using from standard testing.T
 type T interface {
-	Fail()
-	FailNow()
+	Parallel()
+	Logf(format string, args ...interface{})
+	Errorf(format string, args ...interface{})
+	Fatalf(format string, args ...interface{})
 }
 
-// FailingT provides the failing api of testing.T
-var FailingT = fail{}
+// TestingT provides a sub-api of testing.T
+var TestingT = fail{}
 
 type fail struct{}
 
@@ -24,12 +26,18 @@ func (f fail) FailNow() {
 	os.Exit(1)
 }
 
-// Logf print a log line without file location (which would be inside this package)
-func Logf(format string, args ...interface{}) {
+func (f fail) Logf(format string, args ...interface{}) {
 	print(fmt.Sprintf("\tinfo : "+format+"\n", args...))
 }
 
-// Errorf print a log line without file location (which would be inside this package)
-func Errorf(format string, args ...interface{}) {
+func (f fail) Errorf(format string, args ...interface{}) {
 	print(fmt.Sprintf("\terror: "+format+"\n", args...))
 }
+
+func (f fail) Fatalf(format string, args ...interface{}) {
+	print(fmt.Sprintf("\tfatal: "+format+"\n", args...))
+	os.Exit(1)
+}
+
+// Parallel is a no-op for rat.
+func (f fail) Parallel() {}

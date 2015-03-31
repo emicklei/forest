@@ -32,7 +32,7 @@ func TestExpectJsonArray(t *testing.T) {
 
 func TestDump(t *testing.T) {
 	r := tsApi.GET(t, NewConfig("/jsonarray"))
-	tsApi.Dump(t, r)
+	Dump(t, r)
 }
 
 func TestPost(t *testing.T) {

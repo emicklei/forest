@@ -15,8 +15,8 @@ Example
 
 	func TestGetMessages(t *testing.T) {
 		r := chatter.GET(t, rat.NewConfig("/v1/messages?user=zeus"))
-		chatter.ExpectStatus(t,r,200)
-		chatter.ExpectJsonArray(t,r,func(messages []interface{}){
+		ExpectStatus(t,r,200)
+		ExpectJsonArray(t,r,func(messages []interface{}){
 
 			// in the callback you can validate the response structure
 			if len(messages) == 0 {
@@ -33,13 +33,13 @@ If needed, implement the standard TestMain to do global setup and teardown.
 
 		// setup
 		chatter.PUT(t, rat.NewConfig("/v1/messages/1").Body("<payload>"))
-		chatter.ExpectStatus(t,r,204)
+		ExpectStatus(t,r,204)
 
 		exitCode := m.Run()
 
 		// teardown
 		chatter.DELETE(t, rat.NewConfig("/v1/messages/1"))
-		chatter.ExpectStatus(t,r,204)
+		ExpectStatus(t,r,204)
 
 		os.Exit(exitCode)
 	}
