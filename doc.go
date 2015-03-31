@@ -28,8 +28,8 @@ Example
 If needed, implement the standard TestMain to do global setup and teardown.
 
 	func TestMain(m *testing.M) {
-		// there is no *testing.T available, use the logging one
-		t := rat.LoggingT
+		// there is no *testing.T available, use the failing one
+		t := rat.FailingT
 
 		// setup
 		chatter.PUT(t, rat.NewConfig("/v1/messages/1").Body("<payload>"))

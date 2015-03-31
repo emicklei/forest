@@ -32,11 +32,12 @@ func (a *ApiTesting) NewConfig(staticPath string) *RequestConfig {
 func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("GET", a.BaseUrl+config.Uri, nil)
 	if err != nil {
-		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
+		Errorf("invalid Url:%s", a.BaseUrl+config.Uri)
+		t.FailNow()
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	if testing.Verbose() {
-		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+		Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -48,11 +49,12 @@ func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("POST", a.BaseUrl+config.Uri, config.BodyReader)
 	if err != nil {
-		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
+		Errorf("invalid Url:%s", a.BaseUrl+config.Uri)
+		t.FailNow()
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	if testing.Verbose() {
-		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+		Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -64,11 +66,12 @@ func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("PUT", a.BaseUrl+config.Uri, config.BodyReader)
 	if err != nil {
-		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
+		Errorf("invalid Url:%s", a.BaseUrl+config.Uri)
+		t.FailNow()
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	if testing.Verbose() {
-		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+		Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -80,11 +83,12 @@ func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("DELETE", a.BaseUrl+config.Uri, nil)
 	if err != nil {
-		t.Fatalf("invalid Url:%s", a.BaseUrl+config.Uri)
+		Errorf("invalid Url:%s", a.BaseUrl+config.Uri)
+		t.FailNow()
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	if testing.Verbose() {
-		print(fmt.Sprintf("\t%v %v %v\n", httpReq.Method, httpReq.URL, headersString(httpReq.Header)))
+		Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -94,16 +98,16 @@ func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 // Dump is a convenient method to log the full contents of a response
 func (a ApiTesting) Dump(t T, resp *http.Response) {
 	if resp == nil {
-		t.Errorf("no response")
+		Errorf("no response")
 		return
 	}
 	if resp.ContentLength == 0 {
-		t.Logf("empty response")
+		Logf("empty response")
 		return
 	}
 	if testing.Verbose() {
 		for k, v := range resp.Header {
-			print(fmt.Sprintf("\t%s : %v\n", k, strings.Join(v, ",")))
+			Logf("%s : %v", k, strings.Join(v, ","))
 		}
 	}
 	if resp.Body != nil {

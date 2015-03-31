@@ -4,18 +4,23 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"testing"
 )
 
 // ExpectStatus inspects the response status code.
 // If the value is not expected, the body (if any) is logged.
 func ExpectStatus(t T, r *http.Response, status int) {
 	if r == nil {
-		t.Fatalf("expected response but got nil")
+		Logf("got nil but want Http response")
+		t.FailNow()
 	}
 	if r.StatusCode != status {
-		t.Errorf("expected status %d but got %d", status, r.StatusCode)
+		Errorf("got status %d but want %d", r.StatusCode, status)
+		t.Fail()
 		data, _ := ioutil.ReadAll(r.Body)
-		t.Logf("response body:%s", string(data))
+		if testing.Verbose() {
+			Logf("http response body:%s", string(data))
+		}
 	}
 }
 
@@ -23,18 +28,21 @@ func ExpectStatus(t T, r *http.Response, status int) {
 // This is implicity called after sending a Http request.
 func CheckError(t T, err error) {
 	if err != nil {
-		t.Fatalf("did not expect to receive err: %v", err)
+		Logf("did not expect to receive err: %v", err)
+		t.FailNow()
 	}
 }
 
 // ExpectHeader inspects the header of the response.
 func ExpectHeader(t T, r *http.Response, name, value string) {
 	if r == nil {
-		t.Fatalf("expected response but got nil")
+		Logf("got nil but want a Http response")
+		t.FailNow()
 	}
 	rname := r.Header.Get(name)
 	if rname != value {
-		t.Errorf("expected header %s=%s but got %s", name, value, rname)
+		Logf("got header %s=%s but want %s", name, rname, value)
+		t.Fail()
 	}
 }
 
@@ -43,15 +51,19 @@ func ExpectHeader(t T, r *http.Response, name, value string) {
 func ExpectJsonHash(t T, r *http.Response, callback func(hash map[string]interface{})) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		t.Fatalf("unable to read response body:%v", err)
+		Logf("unable to read response body:%v", err)
+		t.FailNow()
 	}
 	defer r.Body.Close()
 
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
-		t.Logf("%s", string(data))
-		t.Fatalf("unable to unmarshal Json:%v", err)
+		if len(data) > 0 {
+			Logf("%s", string(data))
+		}
+		Logf("unable to unmarshal Json:%v", err)
+		t.FailNow()
 	}
 	callback(dict)
 }
@@ -61,16 +73,20 @@ func ExpectJsonHash(t T, r *http.Response, callback func(hash map[string]interfa
 func ExpectJsonArray(t T, r *http.Response, callback func(array []interface{})) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		t.Fatalf("unable to read response body:%v", err)
+		Logf("unable to read response body:%v", err)
+		t.FailNow()
 	}
 	defer r.Body.Close()
 
-	t.Logf(string(data))
+	if testing.Verbose() {
+		Logf("%s", string(data))
+	}
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
-		t.Logf("%s", string(data))
-		t.Fatalf("unable to unmarshal Json:%v", err)
+		Logf("%s", string(data))
+		Logf("unable to unmarshal Json:%v", err)
+		t.FailNow()
 	}
 	callback(slice)
 }
@@ -80,7 +96,8 @@ func ExpectJsonArray(t T, r *http.Response, callback func(array []interface{})) 
 func ExpectString(t T, r *http.Response, callback func(content string)) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		t.Fatalf("unable to read response body:%v", err)
+		Logf("unable to read response body:%v", err)
+		t.FailNow()
 	}
 	defer r.Body.Close()
 

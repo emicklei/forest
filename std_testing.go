@@ -1,31 +1,35 @@
 package rat
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
 // T is the interface that this package is using from standard testing.T
 type T interface {
-	Logf(format string, args ...interface{})
-	Errorf(format string, args ...interface{})
-	Fatalf(format string, args ...interface{})
+	Fail()
+	FailNow()
 }
 
-// LoggingT provides the reporting api of testing.T
-var LoggingT = logger{}
+// FailingT provides the failing api of testing.T
+var FailingT = fail{}
 
-type logger struct{}
+type fail struct{}
 
-func (l logger) Logf(format string, args ...interface{}) {
-	log.Printf(format, args...)
-}
+// Fail marks the function as having failed but continues execution.
+func (f fail) Fail() {}
 
-func (l logger) Errorf(format string, args ...interface{}) {
-	log.Printf("[ERROR] "+format, args...)
-}
-
-func (l logger) Fatalf(format string, args ...interface{}) {
-	log.Printf("[FATAL] "+format, args...)
+// FailNow marks the function as having failed but continues execution.
+func (f fail) FailNow() {
 	os.Exit(1)
+}
+
+// Logf print a log line without file location (which would be inside this package)
+func Logf(format string, args ...interface{}) {
+	print(fmt.Sprintf("\tinfo : "+format+"\n", args...))
+}
+
+// Errorf print a log line without file location (which would be inside this package)
+func Errorf(format string, args ...interface{}) {
+	print(fmt.Sprintf("\terror: "+format+"\n", args...))
 }
