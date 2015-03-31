@@ -10,6 +10,8 @@ import (
 	"testing"
 )
 
+// go test -coverprofile=cover.out && go tool cover -html=cover.out
+
 var tsApi *ApiTesting
 
 func TestMain(m *testing.M) {

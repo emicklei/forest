@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"path"
 	"strings"
 )
 
@@ -34,10 +35,30 @@ func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
 	return r
 }
 
-// format example: /v1/{param}/
+// format example: /v1/persons/{param}/ + 42 => /v1/persons/42
 func (r *RequestConfig) Path(template string, pathparams ...interface{}) *RequestConfig {
-	// TODO parameter substitution
-	r.Uri = template
+	var uri bytes.Buffer
+	p := 0
+	tokens := strings.Split(template, "/")
+	for _, each := range tokens {
+		if len(each) == 0 {
+			continue
+		}
+		uri.WriteString("/")
+		if strings.HasPrefix(each, "{") && strings.HasSuffix(each, "}") {
+			if p == len(pathparams) {
+				// abort
+				r.Uri = template
+				return r
+			}
+			param := fmt.Sprintf("%v", pathparams[p])
+			uri.WriteString(url.QueryEscape(param))
+			p++
+		} else {
+			uri.WriteString(each)
+		}
+	}
+	r.Uri = uri.String()
 	return r
 }
 
@@ -55,6 +76,10 @@ func (r *RequestConfig) Header(name, value string) *RequestConfig {
 func (r *RequestConfig) Body(body string) *RequestConfig {
 	r.BodyReader = strings.NewReader(body)
 	return r
+}
+
+func (r *RequestConfig) pathAndQuery() string {
+	return path.Join(r.Uri, r.Values.Encode())
 }
 
 // Content encodes the payload conform the content type given.
@@ -90,6 +115,7 @@ func (r *RequestConfig) Content(payload interface{}, contentType string) *Reques
 	bits, ok := payload.([]byte)
 	if ok {
 		r.BodyReader = bytes.NewReader(bits)
+		return r
 	}
 	r.Body(fmt.Sprintf("cannot encode payload, unknown content type:%s", contentType))
 	return r

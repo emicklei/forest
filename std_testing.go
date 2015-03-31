@@ -14,30 +14,27 @@ type T interface {
 }
 
 // TestingT provides a sub-api of testing.T
-var TestingT = fail{}
+var TestingT = logging{true}
 
-type fail struct{}
-
-// Fail marks the function as having failed but continues execution.
-func (f fail) Fail() {}
-
-// FailNow marks the function as having failed but continues execution.
-func (f fail) FailNow() {
-	os.Exit(1)
+type logging struct {
+	// this field exists for testing this package only
+	doExit bool
 }
 
-func (f fail) Logf(format string, args ...interface{}) {
-	print(fmt.Sprintf("\tinfo : "+format+"\n", args...))
+func (f logging) Logf(format string, args ...interface{}) {
+	fmt.Printf("\tinfo : "+format+"\n", args...)
 }
 
-func (f fail) Errorf(format string, args ...interface{}) {
-	print(fmt.Sprintf("\terror: "+format+"\n", args...))
+func (f logging) Errorf(format string, args ...interface{}) {
+	fmt.Printf("\terror: "+format+"\n", args...)
 }
 
-func (f fail) Fatalf(format string, args ...interface{}) {
-	print(fmt.Sprintf("\tfatal: "+format+"\n", args...))
-	os.Exit(1)
+func (f logging) Fatalf(format string, args ...interface{}) {
+	fmt.Printf("\tfatal: "+format+"\n", args...)
+	if f.doExit {
+		os.Exit(1)
+	}
 }
 
-// Parallel is a no-op for rat.
-func (f fail) Parallel() {}
+// Parallel is a no-op for this package.
+func (f logging) Parallel() {}
