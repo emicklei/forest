@@ -29,3 +29,19 @@ func TestExpectJsonArray(t *testing.T) {
 		}
 	})
 }
+
+type Root struct {
+	Child struct {
+		Name  string `xml:"name,attr"`
+		Value int
+	}
+}
+
+func TestExpectXmlDoc(t *testing.T) {
+	r := tsApi.GET(t, NewConfig("/xmldoc"))
+	var root Root
+	ExpectXmlDocument(t, r, &root)
+	if root.Child.Name != "answer" {
+		t.Error("expected attribute was the answer")
+	}
+}

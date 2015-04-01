@@ -2,6 +2,7 @@ package rat
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -81,8 +82,8 @@ func ExpectJsonArray(t T, r *http.Response, callback func(array []interface{})) 
 	callback(slice)
 }
 
-// ExpectString tries to convert the response body into a Go string callback parameter.
-// Fail if the body could not be read.
+// ExpectString reads the response body into a Go string callback parameter.
+// Fail if the body could not be read or unmarshalled.
 func ExpectString(t T, r *http.Response, callback func(content string)) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -92,4 +93,21 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 	}
 
 	callback(string(data))
+}
+
+// ExpectXmlDocument tries to unmarshal the response body into field of the provided document.
+// Fail if the body could not be read or unmarshalled.
+func ExpectXmlDocument(t T, r *http.Response, doc interface{}) {
+	data, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		t.Errorf("ExpectXmlDocument failed: unable to read response body:%v", err)
+		return
+	}
+	t.Logf("%s", string(data))
+
+	err = xml.Unmarshal(data, doc)
+	if err != nil {
+		t.Errorf("ExpectXmlDocument failed: unable to unmarshal Xml:%v", err)
+	}
 }
