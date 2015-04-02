@@ -7,7 +7,6 @@ import (
 
 // T is the interface that this package is using from standard testing.T
 type T interface {
-	Parallel()
 	Logf(format string, args ...interface{})
 	Errorf(format string, args ...interface{})
 	Fatalf(format string, args ...interface{})
@@ -35,6 +34,3 @@ func (f logging) Fatalf(format string, args ...interface{}) {
 		os.Exit(1)
 	}
 }
-
-// Parallel is a no-op for this package.
-func (f logging) Parallel() {}
