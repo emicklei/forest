@@ -45,3 +45,14 @@ func TestExpectXmlDoc(t *testing.T) {
 		t.Error("expected attribute was the answer")
 	}
 }
+
+func TestExpectJsonDoc(t *testing.T) {
+	r := tsApi.GET(t, NewConfig("/jsondoc"))
+	root := struct {
+		Value int
+	}{}
+	ExpectJsonDocument(t, r, &root)
+	if root.Value != 42 {
+		t.Errorf("expected 42 was the answer, got %v", root.Value)
+	}
+}
