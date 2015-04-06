@@ -15,7 +15,7 @@ Example
 	func TestGetMessages(t *testing.T) {
 		r := chatter.GET(t, rat.NewConfig("/v1/messages?user=zeus"))
 		ExpectStatus(t,r,200)
-		ExpectJsonArray(t,r,func(messages []interface{}){
+		ExpectJSONArray(t,r,func(messages []interface{}){
 
 			// in the callback you can validate the response structure
 			if len(messages) == 0 {
