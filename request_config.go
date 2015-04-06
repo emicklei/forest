@@ -20,6 +20,8 @@ type RequestConfig struct {
 	Values     url.Values
 }
 
+// NewConfig returns a new RequestConfig with initialized empty headers and query parameters.
+// The Uri is set to the path argument.
 func NewConfig(staticPath string) *RequestConfig {
 	return &RequestConfig{
 		HeaderMap: http.Header{},
@@ -35,6 +37,7 @@ func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
 	return r
 }
 
+// Path sets the URL path with optional path parameters.
 // format example: /v1/persons/{param}/ + 42 => /v1/persons/42
 func (r *RequestConfig) Path(template string, pathparams ...interface{}) *RequestConfig {
 	var uri bytes.Buffer
@@ -62,11 +65,13 @@ func (r *RequestConfig) Path(template string, pathparams ...interface{}) *Reques
 	return r
 }
 
+// Query adds a name=value pair to the list of parameters.
 func (r *RequestConfig) Query(name string, value interface{}) *RequestConfig {
 	r.Values.Add(name, fmt.Sprintf("%v", value))
 	return r
 }
 
+// Header adds a name=value pair to the list of headers.
 func (r *RequestConfig) Header(name, value string) *RequestConfig {
 	r.HeaderMap.Add(name, value)
 	return r

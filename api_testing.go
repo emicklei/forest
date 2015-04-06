@@ -4,14 +4,14 @@ import "net/http"
 
 // ApiTesting provides functions to call a REST api and validate its responses.
 type ApiTesting struct {
-	BaseUrl string
+	BaseURL string
 	client  *http.Client
 }
 
 // NewClient returns a new ApiTesting that can be used to send Http requests.
-func NewClient(baseUrl string, httpClient *http.Client) *ApiTesting {
+func NewClient(baseURL string, httpClient *http.Client) *ApiTesting {
 	return &ApiTesting{
-		BaseUrl: baseUrl,
+		BaseURL: baseURL,
 		client:  httpClient,
 	}
 }
@@ -19,9 +19,9 @@ func NewClient(baseUrl string, httpClient *http.Client) *ApiTesting {
 // GET sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("GET", a.BaseUrl+config.pathAndQuery(), nil)
+	httpReq, err := http.NewRequest("GET", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseUrl+config.pathAndQuery())
+		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -33,9 +33,9 @@ func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 // POST sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("POST", a.BaseUrl+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := http.NewRequest("POST", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseUrl+config.pathAndQuery())
+		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -47,9 +47,9 @@ func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 // PUT sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("PUT", a.BaseUrl+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := http.NewRequest("PUT", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseUrl+config.pathAndQuery())
+		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -61,9 +61,9 @@ func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 // DELETE sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("DELETE", a.BaseUrl+config.pathAndQuery(), nil)
+	httpReq, err := http.NewRequest("DELETE", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseUrl+config.pathAndQuery())
+		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -75,9 +75,9 @@ func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 // PATCH sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *ApiTesting) PATCH(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("PATCH", a.BaseUrl+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := http.NewRequest("PATCH", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseUrl+config.pathAndQuery())
+		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))

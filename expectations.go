@@ -45,31 +45,31 @@ func ExpectHeader(t T, r *http.Response, name, value string) {
 	}
 }
 
-// ExpectJsonHash tries to unmarshal the response body into a Go map callback parameter.
+// ExpectJSONHash tries to unmarshal the response body into a Go map callback parameter.
 // Fail if the body could not be read or if unmarshalling was not possible.
-func ExpectJsonHash(t T, r *http.Response, callback func(hash map[string]interface{})) {
+func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interface{})) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJsonHash failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONHash failed: unable to read response body:%v", err)
 		return
 	}
 
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
-		t.Errorf("ExpectJsonHash failed: unable to unmarshal Json:%v", err)
+		t.Errorf("ExpectJSONHash failed: unable to unmarshal Json:%v", err)
 	}
 	callback(dict)
 }
 
-// ExpectJsonArray tries to unmarshal the response body into a Go slice callback parameter.
+// ExpectJSONArray tries to unmarshal the response body into a Go slice callback parameter.
 // Fail if the body could not be read or if unmarshalling was not possible.
-func ExpectJsonArray(t T, r *http.Response, callback func(array []interface{})) {
+func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJsonArray failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONArray failed: unable to read response body:%v", err)
 		return
 	}
 
@@ -77,7 +77,7 @@ func ExpectJsonArray(t T, r *http.Response, callback func(array []interface{})) 
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
-		t.Errorf("ExpectJsonArray failed: unable to unmarshal Json:%v", err)
+		t.Errorf("ExpectJSONArray failed: unable to unmarshal Json:%v", err)
 	}
 	callback(slice)
 }
@@ -95,36 +95,36 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 	callback(string(data))
 }
 
-// ExpectXmlDocument tries to unmarshal the response body into fields of the provided document (struct).
+// ExpectXMLDocument tries to unmarshal the response body into fields of the provided document (struct).
 // Fail if the body could not be read or unmarshalled.
-func ExpectXmlDocument(t T, r *http.Response, doc interface{}) {
+func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectXmlDocument failed: unable to read response body:%v", err)
+		t.Errorf("ExpectXMLDocument failed: unable to read response body:%v", err)
 		return
 	}
 	t.Logf("%s", string(data))
 
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
-		t.Errorf("ExpectXmlDocument failed: unable to unmarshal Xml:%v", err)
+		t.Errorf("ExpectXMLDocument failed: unable to unmarshal Xml:%v", err)
 	}
 }
 
-// ExpectJsonDocument tries to unmarshal the response body into fields of the provided document (struct).
+// ExpectJSONDocument tries to unmarshal the response body into fields of the provided document (struct).
 // Fail if the body could not be read or unmarshalled.
-func ExpectJsonDocument(t T, r *http.Response, doc interface{}) {
+func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJsonDocument failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONDocument failed: unable to read response body:%v", err)
 		return
 	}
 	t.Logf("%s", string(data))
 
 	err = json.Unmarshal(data, doc)
 	if err != nil {
-		t.Errorf("ExpectJsonDocument failed: unable to unmarshal Json:%v", err)
+		t.Errorf("ExpectJSONDocument failed: unable to unmarshal Json:%v", err)
 	}
 }

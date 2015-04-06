@@ -12,18 +12,18 @@ func TestExpectResponseHeader(t *testing.T) {
 	ExpectHeader(t, r, "Content-Type", "application/json")
 }
 
-func TestExpectJsonHash(t *testing.T) {
+func TestExpectJSONHash(t *testing.T) {
 	r := tsApi.GET(t, NewConfig("/jsondoc"))
-	ExpectJsonHash(t, r, func(hash map[string]interface{}) {
+	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
 		if hash["Value"] != float64(42) {
 			t.Errorf("expected 42 but got %v (%T)", hash["Value"], hash["Value"])
 		}
 	})
 }
 
-func TestExpectJsonArray(t *testing.T) {
+func TestExpectJSONArray(t *testing.T) {
 	r := tsApi.GET(t, NewConfig("/jsonarray"))
-	ExpectJsonArray(t, r, func(a []interface{}) {
+	ExpectJSONArray(t, r, func(a []interface{}) {
 		if len(a) != 1 && a[0] != 42 {
 			t.Errorf("expected 42 but got %v (%T)", a, a)
 		}
@@ -37,21 +37,21 @@ type Root struct {
 	}
 }
 
-func TestExpectXmlDoc(t *testing.T) {
+func TestExpectXMLDoc(t *testing.T) {
 	r := tsApi.GET(t, NewConfig("/xmldoc"))
 	var root Root
-	ExpectXmlDocument(t, r, &root)
+	ExpectXMLDocument(t, r, &root)
 	if root.Child.Name != "answer" {
 		t.Error("expected attribute was the answer")
 	}
 }
 
-func TestExpectJsonDoc(t *testing.T) {
+func TestExpectJSONDoc(t *testing.T) {
 	r := tsApi.GET(t, NewConfig("/jsondoc"))
 	root := struct {
 		Value int
 	}{}
-	ExpectJsonDocument(t, r, &root)
+	ExpectJSONDocument(t, r, &root)
 	if root.Value != 42 {
 		t.Errorf("expected 42 was the answer, got %v", root.Value)
 	}

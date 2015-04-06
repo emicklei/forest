@@ -42,9 +42,8 @@ func Dump(t T, resp *http.Response) {
 func headersString(h http.Header) string {
 	if len(h) == 0 {
 		return ""
-	} else {
-		return fmt.Sprintf("%v", h)
 	}
+	return fmt.Sprintf("%v", h)
 }
 
 func copyHeaders(from, to http.Header) {

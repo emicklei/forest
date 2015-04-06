@@ -1,5 +1,4 @@
-/*
-Package rat, rest api testing in Go
+/* Package rat, rest api testing in Go
 
 This package provides a few simple helper types and functions to create
 functional tests that call a running REST based WebService.
