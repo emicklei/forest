@@ -6,7 +6,7 @@ It requires a Swagger 1.2 API JSON endpoint.
 	
 ### Installation
 
-	cd  $GOPATH/src/github.com/emicklei/rat/cmd
+	cd  $GOPATH/src/github.com/emicklei/rat/ratgen
 	go build -o $GOPATH/bin/ratgen
 	chmod +x $GOPATH/bin/ratgen
 	
