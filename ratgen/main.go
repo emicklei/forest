@@ -52,7 +52,7 @@ func writeTest(api swagger.Api, op swagger.Operation) {
 		Status: status(op),
 	}
 	context := sanitize(api.Path)
-	where := path.Join(*targetDirectory, "test_"+context+"_"+op.Nickname+"_test.go")
+	where := path.Join(*targetDirectory, context+"_"+op.Nickname+"_test.go")
 	o, err := os.Create(where)
 	if err != nil {
 		log.Fatal(err)
@@ -73,7 +73,7 @@ func basePathFrom(url string) string {
 }
 
 func sanitize(resourcepath string) string {
-	withoutSlashes := strings.Replace(resourcepath, "/", "", -1)
+	withoutSlashes := strings.Replace(resourcepath, "/", "-", -1)
 	curly := strings.Index(withoutSlashes, "{")
 	if curly > -1 {
 		return withoutSlashes[:curly]

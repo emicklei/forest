@@ -54,7 +54,6 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		t.Errorf("ExpectJSONHash failed: unable to read response body:%v", err)
 		return
 	}
-
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
@@ -72,8 +71,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		t.Errorf("ExpectJSONArray failed: unable to read response body:%v", err)
 		return
 	}
-
-	t.Logf("%s", string(data))
+	t.Logf("Response body:\n%s", string(data))
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
@@ -91,7 +89,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 		t.Errorf("ExpectString failed: unable to read response body:%v", err)
 		return
 	}
-
+	t.Logf("Response body:\n%s", string(data))
 	callback(string(data))
 }
 
@@ -104,8 +102,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 		t.Errorf("ExpectXMLDocument failed: unable to read response body:%v", err)
 		return
 	}
-	t.Logf("%s", string(data))
-
+	t.Logf("Response body:\n%s", string(data))
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
 		t.Errorf("ExpectXMLDocument failed: unable to unmarshal Xml:%v", err)
@@ -121,8 +118,7 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 		t.Errorf("ExpectJSONDocument failed: unable to read response body:%v", err)
 		return
 	}
-	t.Logf("%s", string(data))
-
+	t.Logf("Response body:\n%s", string(data))
 	err = json.Unmarshal(data, doc)
 	if err != nil {
 		t.Errorf("ExpectJSONDocument failed: unable to unmarshal Json:%v", err)

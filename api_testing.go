@@ -24,7 +24,7 @@ func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -38,7 +38,7 @@ func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -52,7 +52,7 @@ func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -66,7 +66,7 @@ func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
@@ -80,7 +80,7 @@ func (a *ApiTesting) PATCH(t T, config *RequestConfig) *http.Response {
 		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	t.Logf("%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return resp
