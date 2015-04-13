@@ -48,6 +48,10 @@ func ExpectHeader(t T, r *http.Response, name, value string) {
 // ExpectJSONHash tries to unmarshal the response body into a Go map callback parameter.
 // Fail if the body could not be read or if unmarshalling was not possible.
 func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interface{})) {
+	if r == nil {
+		t.Errorf("ExpectJSONHash failed: no response available")
+		return
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -65,6 +69,10 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 // ExpectJSONArray tries to unmarshal the response body into a Go slice callback parameter.
 // Fail if the body could not be read or if unmarshalling was not possible.
 func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) {
+	if r == nil {
+		t.Errorf("ExpectJSONArray failed: no response available")
+		return
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -83,6 +91,10 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 // ExpectString reads the response body into a Go string callback parameter.
 // Fail if the body could not be read or unmarshalled.
 func ExpectString(t T, r *http.Response, callback func(content string)) {
+	if r == nil {
+		t.Errorf("ExpectString failed: no response available")
+		return
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -96,6 +108,10 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 // ExpectXMLDocument tries to unmarshal the response body into fields of the provided document (struct).
 // Fail if the body could not be read or unmarshalled.
 func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
+	if r == nil {
+		t.Errorf("ExpectXMLDocument failed: no response available")
+		return
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -112,6 +128,10 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 // ExpectJSONDocument tries to unmarshal the response body into fields of the provided document (struct).
 // Fail if the body could not be read or unmarshalled.
 func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
+	if r == nil {
+		t.Errorf("ExpectJSONDocument failed: no response available")
+		return
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
