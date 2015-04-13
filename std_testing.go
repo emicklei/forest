@@ -3,6 +3,7 @@ package rat
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 // T is the interface that this package is using from standard testing.T
@@ -21,16 +22,23 @@ type logging struct {
 }
 
 func (f logging) Logf(format string, args ...interface{}) {
-	fmt.Printf("\tinfo : "+format+"\n", args...)
+	fmt.Printf("\tinfo : "+tabify(format)+"\n", args...)
 }
 
 func (f logging) Errorf(format string, args ...interface{}) {
-	fmt.Printf("\terror: "+format+"\n", args...)
+	fmt.Printf("\terror: "+tabify(format)+"\n", args...)
 }
 
 func (f logging) Fatalf(format string, args ...interface{}) {
-	fmt.Printf("\tfatal: "+format+"\n", args...)
+	fmt.Printf("\tfatal: "+tabify(format)+"\n", args...)
 	if f.doExit {
 		os.Exit(1)
 	}
+}
+
+func tabify(format string) string {
+	if strings.HasPrefix(format, "\n") {
+		return strings.Replace(format, "\n", "\n\t\t", 1)
+	}
+	return format
 }
