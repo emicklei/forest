@@ -55,7 +55,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJSONHash failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONHash failed: unable to read response body (already dumped?):%v", err)
 		return
 	}
 	dict := map[string]interface{}{}
@@ -76,7 +76,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJSONArray failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONArray failed: unable to read response body (already dumped?):%v", err)
 		return
 	}
 	t.Logf("Response body:\n%s", string(data))
@@ -98,7 +98,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectString failed: unable to read response body:%v", err)
+		t.Errorf("ExpectString failed: unable to read response body (already dumped?):%v", err)
 		return
 	}
 	t.Logf("Response body:\n%s", string(data))
@@ -115,7 +115,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectXMLDocument failed: unable to read response body:%v", err)
+		t.Errorf("ExpectXMLDocument failed: unable to read response body (already dumped?):%v", err)
 		return
 	}
 	t.Logf("Response body:\n%s", string(data))
@@ -135,7 +135,7 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("ExpectJSONDocument failed: unable to read response body:%v", err)
+		t.Errorf("ExpectJSONDocument failed: unable to read response body (already dumped?):%v", err)
 		return
 	}
 	t.Logf("Response body:\n%s", string(data))
