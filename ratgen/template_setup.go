@@ -6,7 +6,6 @@ var setup = template.Must(template.New("setup").Parse(`package main
 
 import (
 	"net/http"
-	"testing"
 
 	. "github.com/emicklei/rat"
 )

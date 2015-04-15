@@ -5,7 +5,6 @@ import "html/template"
 var fun = template.Must(template.New("fun").Parse(`package main
 
 import (
-	"net/http"
 	"testing"
 
 	. "github.com/emicklei/rat"
