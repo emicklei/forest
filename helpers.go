@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"testing"
 )
 
 // Dump is a convenient method to log the full contents of a request and its response.
@@ -40,18 +39,6 @@ func Dump(t T, resp *http.Response) {
 	}
 	buffer.WriteString("\n-\n")
 	t.Logf(buffer.String())
-}
-
-// JSONPath returns the value found by following the dotted path in a JSON document read from the response.
-// E.g
-// 		.chapters.0.title in  { "chapters" : [{"title":"Go a long way"}] }
-// 		.1.color in  [ {"color":"red"}, {"color":"blue"} ]
-func JSONPath(t *testing.T, r *http.Response, dottedPath string) interface{} {
-	var value interface{}
-	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
-		value = pathFindIn(0, strings.Split(dottedPath, ".")[1:], hash)
-	})
-	return value
 }
 
 func headersString(h http.Header) string {

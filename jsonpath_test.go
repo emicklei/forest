@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+func TestJSONPath(t *testing.T) {
+	r := tsApi.GET(t, NewConfig("/json-nested-doc"))
+	if v := JSONPath(t, r, ".Root.Child"); v != 12.0 {
+		t.Errorf("got %v (%T) want 12.0", v, v)
+	}
+}
+
 func TestJSONPathRoot(t *testing.T) {
 	src := map[string]interface{}{
 		"key": "value",
