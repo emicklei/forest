@@ -4,24 +4,28 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
-	"testing"
 
 	"gopkg.in/xmlpath.v2"
 )
 
-func XMLPath(t *testing.T, r *http.Response, xpath string) interface{} {
+// XMLPath returns the value found by following the xpath expression in a XML document (payload of response).
+func XMLPath(t T, r *http.Response, xpath string) interface{} {
 	if r == nil {
-		t.Error("no response to read body from")
+		t.Fatalf("%sXMLPath: no response to read body from", ErrorMessagePrefix)
 		return nil
 	}
 	if r.Body == nil {
-		t.Error("no response body to read")
+		t.Fatalf("%sXMLPath: no response body to read", ErrorMessagePrefix)
 		return nil
 	}
-	path := xmlpath.MustCompile(xpath)
+	path, err := xmlpath.Compile(xpath)
+	if err != nil {
+		t.Errorf("%sXMLPath: invalid xpath expression:%v", ErrorMessagePrefix, err)
+		return nil
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		t.Error("unable to read response body")
+		t.Errorf("%sXMLPath: unable to read response body", ErrorMessagePrefix)
 		return nil
 	}
 	root, err := xmlpath.Parse(bytes.NewReader(data))
@@ -29,12 +33,12 @@ func XMLPath(t *testing.T, r *http.Response, xpath string) interface{} {
 	r.Body = &closeableReader{bytes.NewReader(data)}
 
 	if err != nil {
-		t.Errorf("unable to parse xml:%v", err)
+		t.Errorf("%sXMLPath: unable to parse xml:%v", ErrorMessagePrefix, err)
 		return nil
 	}
 	if value, ok := path.String(root); ok {
 		return value
 	}
-	t.Errorf("no value for path:%s", xpath)
+	t.Errorf("%sXMLPath: no value for path: %s", ErrorMessagePrefix, xpath)
 	return nil
 }

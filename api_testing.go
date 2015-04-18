@@ -21,7 +21,7 @@ func NewClient(baseURL string, httpClient *http.Client) *ApiTesting {
 func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("GET", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
+		t.Fatalf("%sGET: invalid Url:%s", ErrorMessagePrefix, a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -35,7 +35,7 @@ func (a *ApiTesting) GET(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("POST", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
+		t.Fatalf("%sPOST: invalid Url:%s", ErrorMessagePrefix, a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -49,7 +49,7 @@ func (a *ApiTesting) POST(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("PUT", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
+		t.Fatalf("%sPUT: invalid Url:%s", ErrorMessagePrefix, a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -63,7 +63,7 @@ func (a *ApiTesting) PUT(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("DELETE", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
+		t.Fatalf("%sDELETE: invalid Url:%s", ErrorMessagePrefix, a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -77,7 +77,7 @@ func (a *ApiTesting) DELETE(t T, config *RequestConfig) *http.Response {
 func (a *ApiTesting) PATCH(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("PATCH", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Errorf("invalid Url:%s", a.BaseURL+config.pathAndQuery())
+		t.Fatalf("%sPATCH: invalid Url:%s", ErrorMessagePrefix, a.BaseURL+config.pathAndQuery())
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))

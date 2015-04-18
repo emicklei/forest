@@ -21,13 +21,13 @@ type RequestConfig struct {
 }
 
 // NewConfig returns a new RequestConfig with initialized empty headers and query parameters.
-// The Uri is set to the path argument.
-func NewConfig(staticPath string) *RequestConfig {
-	return &RequestConfig{
+func NewConfig(pathTemplate string, pathParams ...interface{}) *RequestConfig {
+	cfg := &RequestConfig{
 		HeaderMap: http.Header{},
 		Values:    url.Values{},
-		Uri:       staticPath,
 	}
+	cfg.Path(pathTemplate, pathParams...)
+	return cfg
 }
 
 // Do calls the one-argument function parameter with the receiver.
@@ -39,22 +39,22 @@ func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
 
 // Path sets the URL path with optional path parameters.
 // format example: /v1/persons/{param}/ + 42 => /v1/persons/42
-func (r *RequestConfig) Path(template string, pathparams ...interface{}) *RequestConfig {
+func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 	var uri bytes.Buffer
 	p := 0
-	tokens := strings.Split(template, "/")
+	tokens := strings.Split(pathTemplate, "/")
 	for _, each := range tokens {
 		if len(each) == 0 {
 			continue
 		}
 		uri.WriteString("/")
 		if strings.HasPrefix(each, "{") && strings.HasSuffix(each, "}") {
-			if p == len(pathparams) {
+			if p == len(pathParams) {
 				// abort
-				r.Uri = template
+				r.Uri = pathTemplate
 				return r
 			}
-			param := fmt.Sprintf("%v", pathparams[p])
+			param := fmt.Sprintf("%v", pathParams[p])
 			uri.WriteString(url.QueryEscape(param))
 			p++
 		} else {

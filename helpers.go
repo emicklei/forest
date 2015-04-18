@@ -12,7 +12,7 @@ import (
 func Dump(t T, resp *http.Response) {
 	// dump request
 	var buffer bytes.Buffer
-	buffer.WriteString("\n\n")
+	buffer.WriteString("\n")
 	buffer.WriteString(fmt.Sprintf("%v %v\n", resp.Request.Method, resp.Request.URL))
 	for k, v := range resp.Request.Header {
 		buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
@@ -37,7 +37,7 @@ func Dump(t T, resp *http.Response) {
 		// put the body back for re-reads
 		resp.Body = &closeableReader{bytes.NewReader(body)}
 	}
-	buffer.WriteString("\n-\n")
+	buffer.WriteString("\n")
 	t.Logf(buffer.String())
 }
 

@@ -8,8 +8,12 @@ import (
 
 // T is the interface that this package is using from standard testing.T
 type T interface {
+	// Logf formats its arguments according to the format, analogous to Printf, and records the text in the error log.
+	// The text will be printed only if the test fails or the -test.v flag is set.
 	Logf(format string, args ...interface{})
+	// Errorf is equivalent to Logf followed by Fail.
 	Errorf(format string, args ...interface{})
+	// Fatal is equivalent to Log followed by FailNow.
 	Fatalf(format string, args ...interface{})
 }
 
