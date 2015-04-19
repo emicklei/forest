@@ -6,7 +6,7 @@ import (
 )
 
 func TestJSONPath(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/json-nested-doc"))
+	r := tsAPI.GET(t, NewConfig("/json-nested-doc"))
 	if v := JSONPath(t, r, ".Root.Child"); v != 12.0 {
 		t.Errorf("got %v (%T) want 12.0", v, v)
 	}

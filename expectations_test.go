@@ -3,17 +3,17 @@ package rat
 import "testing"
 
 func TestExpectStatus404(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/status/404"))
+	r := tsAPI.GET(t, NewConfig("/status/404"))
 	ExpectStatus(t, r, 404)
 }
 
 func TestExpectResponseHeader(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/jsondoc"))
+	r := tsAPI.GET(t, NewConfig("/jsondoc"))
 	ExpectHeader(t, r, "Content-Type", "application/json")
 }
 
 func TestExpectJSONHash(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/jsondoc"))
+	r := tsAPI.GET(t, NewConfig("/jsondoc"))
 	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
 		if hash["Value"] != float64(42) {
 			t.Errorf("expected 42 but got %v (%T)", hash["Value"], hash["Value"])
@@ -22,7 +22,7 @@ func TestExpectJSONHash(t *testing.T) {
 }
 
 func TestExpectJSONArray(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/jsonarray"))
+	r := tsAPI.GET(t, NewConfig("/jsonarray"))
 	ExpectJSONArray(t, r, func(a []interface{}) {
 		if len(a) != 1 && a[0] != 42 {
 			t.Errorf("expected 42 but got %v (%T)", a, a)
@@ -38,7 +38,7 @@ type Root struct {
 }
 
 func TestExpectXMLDoc(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/xmldoc"))
+	r := tsAPI.GET(t, NewConfig("/xmldoc"))
 	var root Root
 	ExpectXMLDocument(t, r, &root)
 	if root.Child.Name != "answer" {
@@ -47,7 +47,7 @@ func TestExpectXMLDoc(t *testing.T) {
 }
 
 func TestExpectJSONDoc(t *testing.T) {
-	r := tsApi.GET(t, NewConfig("/jsondoc"))
+	r := tsAPI.GET(t, NewConfig("/jsondoc"))
 	root := struct {
 		Value int
 	}{}

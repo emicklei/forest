@@ -94,8 +94,8 @@ func TestThatCustomDoIsCalled(t *testing.T) {
 func TestThatPathCanBeOverriden(t *testing.T) {
 	conf := NewConfig("/a")
 	conf.Path("/b")
-	if conf.Uri != "/b" {
-		t.Errorf("got %v want %v", conf.Uri, "/b")
+	if conf.URI != "/b" {
+		t.Errorf("got %v want %v", conf.URI, "/b")
 	}
 }
 

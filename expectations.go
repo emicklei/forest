@@ -9,18 +9,19 @@ import (
 	"testing"
 )
 
-var ErrorMessagePrefix = "\n:-( "
+// FailMessagePrefix is used for printing failure messages.
+var FailMessagePrefix = "\n:-( "
 
 // ExpectStatus inspects the response status code.
 // If the value is not expected, the complete request, response is logged (iff verbose).
 // Return true if the status is as expected.
 func ExpectStatus(t T, r *http.Response, status int) bool {
 	if r == nil {
-		t.Logf("%sExpectStatus: got nil but want Http response", ErrorMessagePrefix)
+		t.Logf("%sExpectStatus: got nil but want Http response", FailMessagePrefix)
 		return false
 	}
 	if r.StatusCode != status {
-		t.Errorf("%ExpectStatus: got status %d but want %d, %s %v", ErrorMessagePrefix, r.StatusCode, status, r.Request.Method, r.Request.URL)
+		t.Errorf("%sExpectStatus: got status %d but want %d, %s %v", FailMessagePrefix, r.StatusCode, status, r.Request.Method, r.Request.URL)
 		if testing.Verbose() {
 			Dump(t, r)
 		}
@@ -33,18 +34,18 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 // This is implicity called after sending a Http request.
 func CheckError(t T, err error) {
 	if err != nil {
-		t.Errorf("%sCheckError: did not expect to receive err: %v", ErrorMessagePrefix, err)
+		t.Errorf("%sCheckError: did not expect to receive err: %v", FailMessagePrefix, err)
 	}
 }
 
 // ExpectHeader inspects the header of the response.
 func ExpectHeader(t T, r *http.Response, name, value string) {
 	if r == nil {
-		t.Errorf("%sExpectHeader: got nil but want a Http response", ErrorMessagePrefix)
+		t.Errorf("%sExpectHeader: got nil but want a Http response", FailMessagePrefix)
 	}
 	rname := r.Header.Get(name)
 	if rname != value {
-		t.Errorf("%sExpectHeader: got header %s=%s but want %s", ErrorMessagePrefix, name, rname, value)
+		t.Errorf("%sExpectHeader: got header %s=%s but want %s", FailMessagePrefix, name, rname, value)
 	}
 }
 
@@ -52,13 +53,13 @@ func ExpectHeader(t T, r *http.Response, name, value string) {
 // Fail if the body could not be read or if unmarshalling was not possible.
 func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interface{})) {
 	if r == nil {
-		t.Errorf("%sExpectJSONHash: no response available", ErrorMessagePrefix)
+		t.Errorf("%sExpectJSONHash: no response available", FailMessagePrefix)
 		return
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("%sExpectJSONHash: unable to read response body:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONHash: unable to read response body:%v", FailMessagePrefix, err)
 		return
 	}
 	// put the body back for re-reads
@@ -67,7 +68,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
-		t.Errorf("%sExpectJSONHash: unable to unmarshal Json:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONHash: unable to unmarshal Json:%v", FailMessagePrefix, err)
 		return
 	}
 	callback(dict)
@@ -77,13 +78,13 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 // Fail if the body could not be read or if unmarshalling was not possible.
 func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) {
 	if r == nil {
-		t.Errorf("%sExpectJSONArray: no response available", ErrorMessagePrefix)
+		t.Errorf("%sExpectJSONArray: no response available", FailMessagePrefix)
 		return
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("%sExpectJSONArray: unable to read response body:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONArray: unable to read response body:%v", FailMessagePrefix, err)
 		return
 	}
 	// put the body back for re-reads
@@ -92,7 +93,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
-		t.Errorf("%ExpectJSONArray: unable to unmarshal Json:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONArray: unable to unmarshal Json:%v", FailMessagePrefix, err)
 	}
 	callback(slice)
 }
@@ -101,13 +102,13 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 // Fail if the body could not be read or unmarshalled.
 func ExpectString(t T, r *http.Response, callback func(content string)) {
 	if r == nil {
-		t.Errorf("%sExpectString: no response available", ErrorMessagePrefix)
+		t.Errorf("%sExpectString: no response available", FailMessagePrefix)
 		return
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("%sExpectString: unable to read response body:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectString: unable to read response body:%v", FailMessagePrefix, err)
 		return
 	}
 	// put the body back for re-reads
@@ -120,13 +121,13 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 // Fail if the body could not be read or unmarshalled.
 func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 	if r == nil {
-		t.Errorf("%sExpectXMLDocument: no response available", ErrorMessagePrefix)
+		t.Errorf("%sExpectXMLDocument: no response available", FailMessagePrefix)
 		return
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("%sExpectXMLDocument: unable to read response body:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectXMLDocument: unable to read response body:%v", FailMessagePrefix, err)
 		return
 	}
 	// put the body back for re-reads
@@ -134,7 +135,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
-		t.Errorf("%sExpectXMLDocument: unable to unmarshal Xml:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectXMLDocument: unable to unmarshal Xml:%v", FailMessagePrefix, err)
 	}
 }
 
@@ -142,13 +143,13 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 // Fail if the body could not be read or unmarshalled.
 func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 	if r == nil {
-		t.Errorf("%sExpectJSONDocument: no response available", ErrorMessagePrefix)
+		t.Errorf("%sExpectJSONDocument: no response available", FailMessagePrefix)
 		return
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		t.Errorf("%sExpectJSONDocument: unable to read response body :%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONDocument: unable to read response body :%v", FailMessagePrefix, err)
 		return
 	}
 	// put the body back for re-reads
@@ -156,6 +157,6 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 
 	err = json.Unmarshal(data, doc)
 	if err != nil {
-		t.Errorf("%sExpectJSONDocument: unable to unmarshal Json:%v", ErrorMessagePrefix, err)
+		t.Errorf("%sExpectJSONDocument: unable to unmarshal Json:%v", FailMessagePrefix, err)
 	}
 }

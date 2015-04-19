@@ -12,7 +12,7 @@ import (
 
 // go test -coverprofile=cover.out && go tool cover -html=cover.out
 
-var tsApi *ApiTesting
+var tsAPI *APITesting
 
 func TestMain(m *testing.M) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +53,7 @@ func TestMain(m *testing.M) {
 		}
 		// 200 is written
 	}))
-	tsApi = NewClient(ts.URL, new(http.Client))
+	tsAPI = NewClient(ts.URL, new(http.Client))
 
 	exitCode := m.Run()
 	// on early exit close will not be called

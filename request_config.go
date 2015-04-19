@@ -14,7 +14,7 @@ import (
 
 // RequestConfig holds additional information to construct a Http request.
 type RequestConfig struct {
-	Uri        string
+	URI        string
 	BodyReader io.Reader
 	HeaderMap  http.Header
 	Values     url.Values
@@ -51,7 +51,7 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 		if strings.HasPrefix(each, "{") && strings.HasSuffix(each, "}") {
 			if p == len(pathParams) {
 				// abort
-				r.Uri = pathTemplate
+				r.URI = pathTemplate
 				return r
 			}
 			param := fmt.Sprintf("%v", pathParams[p])
@@ -61,7 +61,7 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 			uri.WriteString(each)
 		}
 	}
-	r.Uri = uri.String()
+	r.URI = uri.String()
 	return r
 }
 
@@ -84,7 +84,7 @@ func (r *RequestConfig) Body(body string) *RequestConfig {
 }
 
 func (r *RequestConfig) pathAndQuery() string {
-	return path.Join(r.Uri, r.Values.Encode())
+	return path.Join(r.URI, r.Values.Encode())
 }
 
 // Content encodes the payload conform the content type given.
