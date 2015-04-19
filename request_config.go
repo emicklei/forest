@@ -31,7 +31,7 @@ func NewConfig(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 }
 
 // Do calls the one-argument function parameter with the receiver.
-// This allows for custom convenience functions without breaking the fluent style.
+// This allows for custom convenience functions without breaking the fluent programming style.
 func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
 	block(r)
 	return r
@@ -88,6 +88,7 @@ func (r *RequestConfig) pathAndQuery() string {
 }
 
 // Content encodes the payload conform the content type given.
+// Supported Content-Type values: application/json, application/xml, text/plain
 func (r *RequestConfig) Content(payload interface{}, contentType string) *RequestConfig {
 	r.Header("Content-Type", contentType)
 	if strings.Index(contentType, "application/json") != -1 {
