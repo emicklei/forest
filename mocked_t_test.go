@@ -9,9 +9,9 @@ type mockedT struct {
 func (m *mockedT) Logf(format string, args ...interface{}) {
 	m.logMessage = fmt.Sprintf(format, args...)
 }
-func (m *mockedT) Errorf(format string, args ...interface{}) {
-	m.errorMessage = fmt.Sprintf(format, args...)
+func (m *mockedT) Error(args ...interface{}) {
+	m.errorMessage = fmt.Sprint(args...)
 }
-func (m *mockedT) Fatalf(format string, args ...interface{}) {
-	m.fatalMessage = fmt.Sprintf(format, args...)
+func (m *mockedT) Fatal(args ...interface{}) {
+	m.fatalMessage = fmt.Sprint(args...)
 }

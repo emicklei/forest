@@ -16,7 +16,7 @@ func TestExpectJSONHash(t *testing.T) {
 	r := tsAPI.GET(t, NewConfig("/jsondoc"))
 	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
 		if hash["Value"] != float64(42) {
-			t.Errorf("expected 42 but got %v (%T)", hash["Value"], hash["Value"])
+			t.Error(serrorf("expected 42 but got %v (%T)", hash["Value"], hash["Value"]))
 		}
 	})
 }

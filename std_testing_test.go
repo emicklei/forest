@@ -21,10 +21,10 @@ func TestThatInfoLoggingIsPrinted(t *testing.T) {
 func TestThatErrorLoggingIsPrinted(t *testing.T) {
 	l := logging{false}
 	captureStdout(t, func() {
-		l.Errorf("%s", "logf")
+		l.Error("logf")
 	}, func(output string) {
-		if output != "\terror: logf\n" {
-			t.Errorf("different output than expected:%s", output)
+		if output != "\terror: [logf]\n" {
+			t.Errorf("different output than expected:%q", output)
 		}
 	})
 }
@@ -32,10 +32,10 @@ func TestThatErrorLoggingIsPrinted(t *testing.T) {
 func TestThatFatalLoggingIsPrinted(t *testing.T) {
 	l := logging{false}
 	captureStdout(t, func() {
-		l.Fatalf("%s", "logf")
+		l.Fatal("logf")
 	}, func(output string) {
 		if output != "\tfatal: logf\n" {
-			t.Errorf("different output than expected:%s", output)
+			t.Errorf("different output than expected:%q", output)
 		}
 	})
 }

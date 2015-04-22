@@ -19,6 +19,6 @@ func TestApplyTemplateFail(t *testing.T) {
 	}
 	expected := `failed to parse:template: temporary:1: function "Missing" not defined`
 	if m.fatalMessage != expected {
-		t.Errorf("got %s expected %v", m.fatalMessage, expected)
+		t.Errorf("got %q expected %q", m.fatalMessage, expected)
 	}
 }

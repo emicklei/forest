@@ -11,21 +11,21 @@ import (
 // XMLPath returns the value found by following the xpath expression in a XML document (payload of response).
 func XMLPath(t T, r *http.Response, xpath string) interface{} {
 	if r == nil {
-		t.Fatalf("%sXMLPath: no response to read body from", FailMessagePrefix)
+		t.Fatal(sfatalf("XMLPath: no response to read body from"))
 		return nil
 	}
 	if r.Body == nil {
-		t.Fatalf("%sXMLPath: no response body to read", FailMessagePrefix)
+		t.Fatal(sfatalf("XMLPath: no response body to read"))
 		return nil
 	}
 	path, err := xmlpath.Compile(xpath)
 	if err != nil {
-		t.Errorf("%sXMLPath: invalid xpath expression:%v", FailMessagePrefix, err)
+		t.Error(serrorf("XMLPath: invalid xpath expression:%v", err))
 		return nil
 	}
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		t.Errorf("%sXMLPath: unable to read response body", FailMessagePrefix)
+		t.Error(serrorf("XMLPath: unable to read response body"))
 		return nil
 	}
 	root, err := xmlpath.Parse(bytes.NewReader(data))
@@ -33,12 +33,12 @@ func XMLPath(t T, r *http.Response, xpath string) interface{} {
 	r.Body = &closeableReader{bytes.NewReader(data)}
 
 	if err != nil {
-		t.Errorf("%sXMLPath: unable to parse xml:%v", FailMessagePrefix, err)
+		t.Error(serrorf("XMLPath: unable to parse xml:%v", err))
 		return nil
 	}
 	if value, ok := path.String(root); ok {
 		return value
 	}
-	t.Errorf("%sXMLPath: no value for path: %s", FailMessagePrefix, xpath)
+	t.Error(serrorf("XMLPath: no value for path: %s", xpath))
 	return nil
 }

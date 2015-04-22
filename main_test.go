@@ -15,6 +15,11 @@ import (
 var tsAPI *APITesting
 
 func TestMain(m *testing.M) {
+	// disable for testing
+	ErrorColorSyntaxCode = ""
+	FatalColorSyntaxCode = ""
+	FailMessagePrefix = ""
+
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, "404") {
 			w.WriteHeader(404)
