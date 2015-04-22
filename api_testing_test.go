@@ -21,6 +21,11 @@ func TestPut(t *testing.T) {
 	ExpectStatus(t, r, 204)
 }
 
+func TestPatch(t *testing.T) {
+	r := tsAPI.PATCH(t, NewConfig("/"))
+	ExpectStatus(t, r, 204)
+}
+
 func TestPut404(t *testing.T) {
 	r := tsAPI.PUT(t, NewConfig("/404"))
 	ExpectStatus(t, r, 404)

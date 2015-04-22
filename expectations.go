@@ -9,9 +9,6 @@ import (
 	"testing"
 )
 
-// FailMessagePrefix is used for printing failure messages.
-var FailMessagePrefix = "\n:-( "
-
 // ExpectStatus inspects the response status code.
 // If the value is not expected, the complete request, response is logged (iff verbose).
 // Return true if the status is as expected.
@@ -21,7 +18,7 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 		return false
 	}
 	if r.StatusCode != status {
-		t.Errorf("%sExpectStatus: got status %d but want %d, %s %v", FailMessagePrefix, r.StatusCode, status, r.Request.Method, r.Request.URL)
+		t.Errorf("%s", prettyF("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
 		if testing.Verbose() {
 			Dump(t, r)
 		}

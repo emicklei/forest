@@ -37,7 +37,11 @@ func TestMain(m *testing.M) {
 		}
 		if strings.HasSuffix(r.URL.Path, "xmldoc") {
 			w.Header().Add("Content-Type", "application/xml")
-			fmt.Fprintln(w, `<?xml version="1.0"?><Root><Child name="answer"><Value>42</Value></Child></Root>`)
+			fmt.Fprintln(w, `<?xml version="1.0"?>
+			<Root>
+				<Child name="answer"><Value>1</Value></Child>
+				<Child name="answer"><Value>2</Value></Child>				
+			</Root>`)
 			return
 		}
 		if strings.HasSuffix(r.URL.Path, "echo") {
@@ -48,7 +52,7 @@ func TestMain(m *testing.M) {
 			w.Write(data)
 			return
 		}
-		if r.Method == "POST" || r.Method == "PUT" || r.Method == "DELETE" {
+		if r.Method == "POST" || r.Method == "PUT" || r.Method == "DELETE" || r.Method == "PATCH" {
 			w.WriteHeader(204)
 		}
 		// 200 is written

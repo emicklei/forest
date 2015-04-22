@@ -43,6 +43,12 @@ If needed, implement the standard TestMain to do global setup and teardown.
 		os.Exit(exitCode)
 	}
 
+Features
+
+- In contrast to the standard behavior, the Body of a http.Response is re-readable.
+This means one can apply expectations to a response as well as Dump the full contents.
+
+- XPath expressions using the [https://godoc.org/launchpad.net/xmlpath] package
 
 (c) 2015, http://ernestmicklei.com. MIT License
 */

@@ -8,9 +8,17 @@ import (
 func TestXMLPath(t *testing.T) {
 	r := tsAPI.GET(t, NewConfig("/xmldoc"))
 	v := XMLPath(t, r, "/Root/Child/Value")
-	if v != "42" {
-		t.Errorf("got %v but want 42", v)
+	if v != "1" {
+		t.Errorf("got %v but want 1", v)
 	}
+}
+
+// TODO
+func TestXMLPathAllChilds(t *testing.T) {
+	r := tsAPI.GET(t, NewConfig("/xmldoc"))
+	m := new(mockedT)
+	kids := XMLPath(m, r, "Root//Child")
+	t.Logf("%#v", kids)
 }
 
 func TestXMLPathWrongPath(t *testing.T) {
