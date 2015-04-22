@@ -13,7 +13,7 @@ Example
 
 
 	func TestGetMessages(t *testing.T) {
-		r := chatter.GET(t, rat.NewConfig("/v1/messages?user=zeus"))
+		r := chatter.GET(t, rat.Path("/v1/messages").Query("user","zeus"))
 		ExpectStatus(t,r,200)
 		ExpectJSONArray(t,r,func(messages []interface{}){
 
@@ -31,24 +31,25 @@ If needed, implement the standard TestMain to do global setup and teardown.
 		t := rat.TestingT
 
 		// setup
-		chatter.PUT(t, rat.NewConfig("/v1/messages/1").Body("<payload>"))
+		chatter.PUT(t, rat.Path("/v1/messages/{id}",1).Body("<payload>"))
 		ExpectStatus(t,r,204)
 
 		exitCode := m.Run()
 
 		// teardown
-		chatter.DELETE(t, rat.NewConfig("/v1/messages/1"))
+		chatter.DELETE(t, rat.Path("/v1/messages/{id}",1))
 		ExpectStatus(t,r,204)
 
 		os.Exit(exitCode)
 	}
 
-Features
+Special features
 
 - In contrast to the standard behavior, the Body of a http.Response is re-readable.
 This means one can apply expectations to a response as well as Dump the full contents.
-
 - XPath expressions using the [https://godoc.org/launchpad.net/xmlpath] package
+- Colorizes error output (can be configured using package vars)
+- Functions can be used in setup and teardown (in body of TestMain)
 
 (c) 2015, http://ernestmicklei.com. MIT License
 */

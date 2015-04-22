@@ -18,16 +18,16 @@ var ErrorColorSyntaxCode = "@{wR}"
 var FatalColorSyntaxCode = "@{wR}"
 
 func serrorf(format string, args ...interface{}) string {
-	return ScolorF(ErrorColorSyntaxCode, format, args...)
+	return Scolorf(ErrorColorSyntaxCode, format, args...)
 }
 
 func sfatalf(format string, args ...interface{}) string {
-	return ScolorF(FatalColorSyntaxCode, format, args...)
+	return Scolorf(FatalColorSyntaxCode, format, args...)
 }
 
-// ScolorF returns a string colorized for terminal output using the syntaxCode (unless that's empty).
+// Scolorf returns a string colorized for terminal output using the syntaxCode (unless that's empty).
 // Requires the syntax defined on https://github.com/wsxiaoys/terminal/blob/master/color/color.go
-func ScolorF(syntaxCode string, format string, args ...interface{}) string {
+func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 	plainFormatted := fmt.Sprintf(format, args...)
 	if len(syntaxCode) > 0 {
 		// cannot pass the code as a string param

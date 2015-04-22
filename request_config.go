@@ -20,6 +20,9 @@ type RequestConfig struct {
 	Values     url.Values
 }
 
+// Path is an alias for NewConfig
+var Path = NewConfig
+
 // NewConfig returns a new RequestConfig with initialized empty headers and query parameters.
 func NewConfig(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 	cfg := &RequestConfig{

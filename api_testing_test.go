@@ -3,7 +3,7 @@ package rat
 import "testing"
 
 func TestPost(t *testing.T) {
-	r := tsAPI.POST(t, NewConfig("/echo").Body("data").Header("ECHO", "ping"))
+	r := tsAPI.POST(t, Path("/echo").Body("data").Header("ECHO", "ping"))
 	ExpectString(t, r, func(m string) {
 		if m != "data" {
 			t.Errorf("expected data but got %v", m)
@@ -12,22 +12,22 @@ func TestPost(t *testing.T) {
 	ExpectHeader(t, r, "ECHO", "ping")
 }
 func TestDelete(t *testing.T) {
-	r := tsAPI.DELETE(t, NewConfig("/"))
+	r := tsAPI.DELETE(t, Path("/"))
 	ExpectStatus(t, r, 204)
 }
 
 func TestPut(t *testing.T) {
-	r := tsAPI.PUT(t, NewConfig("/"))
+	r := tsAPI.PUT(t, Path("/"))
 	ExpectStatus(t, r, 204)
 }
 
 func TestPatch(t *testing.T) {
-	r := tsAPI.PATCH(t, NewConfig("/"))
+	r := tsAPI.PATCH(t, Path("/"))
 	ExpectStatus(t, r, 204)
 }
 
 func TestPut404(t *testing.T) {
-	r := tsAPI.PUT(t, NewConfig("/404"))
+	r := tsAPI.PUT(t, Path("/{code}", 404))
 	ExpectStatus(t, r, 404)
 }
 
