@@ -71,11 +71,14 @@ If needed, implement the standard TestMain to do global setup and teardown.
 
 Special features
 
-- In contrast to the standard behavior, the Body of a http.Response is made re-readable.
+In contrast to the standard behavior, the Body of a http.Response is made re-readable.
 This means one can apply expectations to a response as well as dump the full contents.
-- XPath expression support using the [https://godoc.org/launchpad.net/xmlpath] package.
-- Colorizes error output (can be configured using package vars).
-- Functions can be used in setup and teardown (in body of TestMain).
+
+XPath expression support using the [https://godoc.org/launchpad.net/xmlpath] package.
+
+Colorizes error output (can be configured using package vars).
+
+Functions can be used in setup and teardown (in body of TestMain).
 
 (c) 2015, http://ernestmicklei.com. MIT License
 */
