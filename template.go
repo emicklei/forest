@@ -6,7 +6,7 @@ import (
 )
 
 // ProcessTemplate creates a new text Template and executes it using the provided value.
-// Return the string result of applying this template.
+// Returns the string result of applying this template.
 // Failures in the template are reported using t.
 func ProcessTemplate(t T, templateContent string, value interface{}) string {
 	tmp, err := template.New("temporary").Parse(templateContent)
