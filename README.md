@@ -1,4 +1,4 @@
-![forest](https://s3.amazonaws.com/public.philemonworks.com/forest/treeandskyTop.jpg)
+![forest](https://s3.amazonaws.com/public.philemonworks.com/forest/treeandskyTop275.jpg)
 
 # forest - for testing REST api-s in Go
 
@@ -9,4 +9,4 @@ functional tests that call a running REST based WebService.
 		
 (c) 2015, http://ernestmicklei.com. MIT License	
 
-![forest](https://s3.amazonaws.com/public.philemonworks.com/forest/treeandskyBottom.jpg)
+![forest](https://s3.amazonaws.com/public.philemonworks.com/forest/treeandskyBottom275.jpg)
