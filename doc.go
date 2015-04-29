@@ -1,19 +1,19 @@
-/*Package rat has functions for REST Api testing in Go
+/*package forest has functions for REST Api testing in Go
 
 This package provides a few simple helper types and functions to create
 functional tests that call a running REST based WebService.
-A test uses a rat Client that encapsulates a standard http.Client and the base url.
+A test uses a forest Client that encapsulates a standard http.Client and the base url.
 This can be created inside a function, as part of TestMain or as package variable.
 Using the Client, you can send http requests and call expectation functions with the response.
 
 Example
 
 		// setup a shared client to your API
-		var chatter = rat.NewClient("http://api.chatter.com", new(http.Client))
+		var chatter = forest.NewClient("http://api.chatter.com", new(http.Client))
 
 
 		func TestGetMessages(t *testing.T) {
-			r := chatter.GET(t, rat.Path("/v1/messages").Query("user","zeus"))
+			r := chatter.GET(t, forest.Path("/v1/messages").Query("user","zeus"))
 			ExpectStatus(t,r,200)
 			ExpectJSONArray(t,r,func(messages []interface{}){
 
@@ -54,16 +54,16 @@ If needed, implement the standard TestMain to do global setup and teardown.
 
 	func TestMain(m *testing.M) {
 		// there is no *testing.T available, use an stdout implementation
-		t := rat.TestingT
+		t := forest.TestingT
 
 		// setup
-		chatter.PUT(t, rat.Path("/v1/messages/{id}",1).Body("<payload>"))
+		chatter.PUT(t, forest.Path("/v1/messages/{id}",1).Body("<payload>"))
 		ExpectStatus(t,r,204)
 
 		exitCode := m.Run()
 
 		// teardown
-		chatter.DELETE(t, rat.Path("/v1/messages/{id}",1))
+		chatter.DELETE(t, forest.Path("/v1/messages/{id}",1))
 		ExpectStatus(t,r,204)
 
 		os.Exit(exitCode)
@@ -82,4 +82,4 @@ Functions can be used in setup and teardown (in body of TestMain).
 
 (c) 2015, http://ernestmicklei.com. MIT License
 */
-package rat
+package forest

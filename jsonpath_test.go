@@ -1,4 +1,4 @@
-package rat
+package forest
 
 import (
 	"strings"

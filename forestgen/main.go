@@ -63,7 +63,7 @@ func writeTest(api swagger.Api, op swagger.Operation) {
 	} else {
 		fun.Execute(o, data)
 	}
-	log.Printf("[ratgen] written %s\n", where)
+	log.Printf("[forestgen] written %s\n", where)
 }
 
 func basePathFrom(url string) string {

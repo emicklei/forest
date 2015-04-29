@@ -7,7 +7,7 @@ var fun = template.Must(template.New("fun").Parse(`package main
 import (
 	"testing"
 
-	. "github.com/emicklei/rat"
+	. "github.com/emicklei/forest"
 )
 
 func Test_{{.Name}}(t *testing.T) {
@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/emicklei/rat"
+	. "github.com/emicklei/forest"
 )
 
 func Test_{{.Name}}(t *testing.T) {
