@@ -7,7 +7,7 @@ func ExampleExpectJSONHash() {
 
 	yourApi := NewClient("http://api.yourservices.com", new(http.Client)) // yourApi could be a package variable
 
-	r := yourApi.GET(t, NewConfig("/v1/assets").Header("Content-Type", "application/json"))
+	r := yourApi.GET(t, Path("/v1/assets").Header("Content-Type", "application/json"))
 	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
 		// here you should inspect the hash for expected content
 		// and use t (*testing.T) to report a failure.
@@ -16,12 +16,13 @@ func ExampleExpectJSONHash() {
 
 type YourType struct{}
 
+// How to use the ExpectXMLDocument function on a http response.
 func ExampleExpectXMLDocument() {
 	t := TestingT // t would be a *testing.T
 
 	yourApi := NewClient("http://api.yourservices.com", new(http.Client)) // yourApi could be a package variable
 
-	r := yourApi.GET(t, NewConfig("/v1/assets").Header("Content-Type", "application/xml"))
+	r := yourApi.GET(t, Path("/v1/assets").Header("Content-Type", "application/xml"))
 
 	var root YourType // YourType must reflect the expected document structure
 	ExpectXMLDocument(t, r, &root)

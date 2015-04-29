@@ -24,6 +24,7 @@ type RequestConfig struct {
 var Path = NewConfig
 
 // NewConfig returns a new RequestConfig with initialized empty headers and query parameters.
+// See Path for an explanation of the function parameters.
 func NewConfig(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 	cfg := &RequestConfig{
 		HeaderMap: http.Header{},
@@ -68,19 +69,19 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 	return r
 }
 
-// Query adds a name=value pair to the list of parameters.
+// Query adds a name=value pair to the list of query parameters.
 func (r *RequestConfig) Query(name string, value interface{}) *RequestConfig {
 	r.Values.Add(name, fmt.Sprintf("%v", value))
 	return r
 }
 
-// Header adds a name=value pair to the list of headers.
+// Header adds a name=value pair to the list of header parameters.
 func (r *RequestConfig) Header(name, value string) *RequestConfig {
 	r.HeaderMap.Add(name, value)
 	return r
 }
 
-// Body set the playload as is. No content type is set.
+// Body sets the playload as is. No content type is set.
 func (r *RequestConfig) Body(body string) *RequestConfig {
 	r.BodyReader = strings.NewReader(body)
 	return r

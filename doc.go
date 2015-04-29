@@ -1,13 +1,13 @@
 /*package forest has functions for REST Api testing in Go
 
-This package provides a few simple helper types and functions to create
-functional tests that call a running REST based WebService.
-A test uses a forest Client that encapsulates a standard http.Client and the base url.
-This can be created inside a function, as part of TestMain or as package variable.
-Using the Client, you can send http requests and call expectation functions with the response.
+This package provides a few simple helper types and functions to create functional tests that call HTTP services.
+A test uses a forest Client which encapsulates a standard http.Client and a base url.
+Such a client can be created inside a function or by initializing a package variable for shared access.
+Using a client, you can send http requests and call multiple expectation functions on each response.
+
+Most functions of the forest package take the *testing.T variable as an argument to report any error.
 
 Example
-
 		// setup a shared client to your API
 		var chatter = forest.NewClient("http://api.chatter.com", new(http.Client))
 
@@ -24,30 +24,9 @@ Example
 			})
 		}
 
-Other expectations
-
-		var root YourDocument
-		ExpectXMLDocument(t, r, &root)
-		...
-		ExpectJSONDocument(t, r, &root)
-		...
-		ExpectJSONHash(t, r, func(hash map[string]interface{}) {
-			...
-		})
-		...
-		ExpectString(t, r, callback func(content string)) {
-			...
-		})
-		...
-		ExpectHeader(t, r, name, value string) { ... }
-
-Data access
-
-		value := XMLPath(t, r, "/Root/Child/Value")
-		...
-		value := JSONPath(t, r, ".Root.Child")
-		...
-		payload := ProcessTemplate(t, `<Contact><Email>{{.Email}}</Email></Contact>`, contact)
+To compose http requests, you create a RequestConfig value which as a Builder interface for setting
+the path,query,header and body parameters. The ProcessTemplate function can be useful to create textual payloads.
+To inspect http responses, you use the Expect functions that perform the unmarshalling or use XMLPath or JSONPath functions directly on the response.
 
 
 If needed, implement the standard TestMain to do global setup and teardown.
@@ -74,11 +53,12 @@ Special features
 In contrast to the standard behavior, the Body of a http.Response is made re-readable.
 This means one can apply expectations to a response as well as dump the full contents.
 
-XPath expression support using the [https://godoc.org/launchpad.net/xmlpath] package.
+The function XMLPath provides XPath expression support. It uses the [https://godoc.org/launchpad.net/xmlpath] package.
+The similar function JSONPath can be used on JSON documents.
 
 Colorizes error output (can be configured using package vars).
 
-Functions can be used in setup and teardown (in body of TestMain).
+All functions can also be used in a setup and teardown as part of TestMain.
 
 (c) 2015, http://ernestmicklei.com. MIT License
 */
