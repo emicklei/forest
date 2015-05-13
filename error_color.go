@@ -6,6 +6,16 @@ import (
 	"github.com/wsxiaoys/terminal/color"
 )
 
+// TerminalColorsEnabled can be changed to disable the use of terminal coloring.
+// One usecase is to add a command line flag to your test that controls its value.
+//
+//	func init() {
+//		flag.BoolVar(&forest.TerminalColorsEnabled, "color", true, "want colors?")
+//	}
+//
+//	go test -color=false
+var TerminalColorsEnabled = true
+
 // FailMessagePrefix is used for printing failure messages.
 var FailMessagePrefix = "\n:-( "
 
@@ -29,7 +39,7 @@ func sfatalf(format string, args ...interface{}) string {
 // Requires the syntax defined on https://github.com/wsxiaoys/terminal/blob/master/color/color.go .
 func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 	plainFormatted := fmt.Sprintf(format, args...)
-	if len(syntaxCode) > 0 {
+	if len(syntaxCode) > 0 && TerminalColorsEnabled {
 		// cannot pass the code as a string param
 		return color.Sprintf(syntaxCode+"%s%s", FailMessagePrefix, plainFormatted)
 	}

@@ -17,7 +17,7 @@ type T interface {
 	Fatal(args ...interface{})
 }
 
-// TestingT provides a sub-api of testing.T
+// TestingT provides a sub-api of testing.T. Its purpose is to allow the use of this package in TestMain(m).
 var TestingT = logging{true}
 
 type logging struct {
