@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -39,6 +40,25 @@ func Dump(t T, resp *http.Response) {
 	}
 	buffer.WriteString("\n")
 	t.Logf(buffer.String())
+}
+
+type skippeable interface {
+	Skipf(string, ...interface{})
+}
+
+// SkipUnless will Skip the test unless the LABELS environment variable includes any of the provided labels.
+//
+//	LABELS=integration,nightly go test -v
+func SkipUnless(s skippeable, labels ...string) {
+	env := strings.Split(os.Getenv("LABELS"), ",")
+	for _, each := range labels {
+		for _, other := range env {
+			if each == other {
+				return
+			}
+		}
+	}
+	s.Skipf("skipped because provided LABELS=%v does not include any of %v", env, labels)
 }
 
 func headersString(h http.Header) string {
