@@ -2,6 +2,7 @@ package forest
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/wsxiaoys/terminal/color"
 )
@@ -44,4 +45,9 @@ func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 		return color.Sprintf(syntaxCode+"%s%s", FailMessagePrefix, plainFormatted)
 	}
 	return FailMessagePrefix + plainFormatted
+}
+
+// Errorf calls Error on t with a colorized message
+func Errorf(t *testing.T, format string, args ...interface{}) {
+	t.Error(Scolorf(ErrorColorSyntaxCode, format, args...))
 }
