@@ -1,4 +1,5 @@
-/*package forest has functions for REST Api testing in Go
+/*
+Package forest has functions for REST Api testing in Go
 
 This package provides a few simple helper types and functions to create functional tests that call HTTP services.
 A test uses a forest Client which encapsulates a standard http.Client and a base url.
