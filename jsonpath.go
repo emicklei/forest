@@ -16,6 +16,16 @@ func JSONPath(t T, r *http.Response, dottedPath string) interface{} {
 	return value
 }
 
+// JSONArrayPath returns the value found by following the dotted path in a JSON array.
+// E.g .1.title in  [ {"title":"Go a long way"}, {"title":"scary scala"} ]
+func JSONArrayPath(t T, r *http.Response, dottedPath string) interface{} {
+	var value interface{}
+	ExpectJSONArray(t, r, func(list []interface{}) {
+		value = pathFindIn(0, strings.Split(dottedPath, ".")[1:], list)
+	})
+	return value
+}
+
 func pathFindIn(index int, tokens []string, here interface{}) interface{} {
 	//.Printf("%d %q %d, %v\n", index, tokens, len(tokens), here)
 	if here == nil {

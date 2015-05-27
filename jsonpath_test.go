@@ -12,6 +12,13 @@ func TestJSONPath(t *testing.T) {
 	}
 }
 
+func TestJSONArrayPath(t *testing.T) {
+	r := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
+	if v := JSONArrayPath(t, r, ".1.digit"); v != 2.0 {
+		t.Errorf("got %v (%T) want 2.0", v, v)
+	}
+}
+
 func TestJSONPathRoot(t *testing.T) {
 	src := map[string]interface{}{
 		"key": "value",

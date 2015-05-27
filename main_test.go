@@ -40,6 +40,11 @@ func TestMain(m *testing.M) {
 			fmt.Fprintln(w, `{"Root": {"Child":12} }`)
 			return
 		}
+		if strings.HasSuffix(r.URL.Path, "json-array-of-doc") {
+			w.Header().Add("Content-Type", "application/json")
+			fmt.Fprintln(w, `[{"digit":1}, {"digit":2} ]`)
+			return
+		}
 		if strings.HasSuffix(r.URL.Path, "xmldoc") {
 			w.Header().Add("Content-Type", "application/xml")
 			fmt.Fprintln(w, `<?xml version="1.0"?>
