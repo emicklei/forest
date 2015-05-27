@@ -25,7 +25,7 @@ func main() {
 	}
 	defer s.Close()
 	setup.Execute(s, basePathFrom(*swaggerJsonUrl))
-	log.Printf("[ratgen] written %s\n", where)
+	log.Printf("[forestgen] written %s\n", where)
 
 	for _, each := range listing.Apis {
 		decl := getApiDeclaration(each.Path)
