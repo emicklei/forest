@@ -1,9 +1,12 @@
 package forest
 
-import "net/http"
+import (
+	"net/http"
+	"testing"
+)
 
 func ExampleJSONArrayPath() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -14,12 +17,12 @@ func ExampleJSONArrayPath() {
 	// ]
 	// then you can verify it using
 	if got, want := JSONArrayPath(t, r, ".0.type"), "tool"; got != want {
-		// t.Errorf("got %v want %v",got,want)
+		t.Errorf("got %v want %v", got, want)
 	}
 }
 
 func ExampleJSONPath() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -28,12 +31,12 @@ func ExampleJSONPath() {
 	// { "id" : "artreyu", "type" : "tool" }
 	// then you can verify it using
 	if got, want := JSONPath(t, r, ".0.id"), "artreyu"; got != want {
-		// t.Errorf("got %v want %v",got,want)
+		t.Errorf("got %v want %v", got, want)
 	}
 }
 
 func ExampleExpectJSONArray() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -45,7 +48,7 @@ func ExampleExpectJSONArray() {
 }
 
 func ExampleExpectJSONHash() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -60,7 +63,7 @@ type YourType struct{}
 
 // How to use the ExpectXMLDocument function on a http response.
 func ExampleExpectXMLDocument() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -73,7 +76,7 @@ func ExampleExpectXMLDocument() {
 }
 
 func ExampleXMLPath() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -86,12 +89,12 @@ func ExampleXMLPath() {
 	// </asset>
 	// then you can verify it using
 	if got, want := XMLPath(t, r, "/asset/id"), "artreyu"; got != want {
-		// t.Errorf("got %v want %v",got,want)
+		t.Errorf("got %v want %v", got, want)
 	}
 }
 
 func ExampleExpectStatus() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
@@ -100,7 +103,7 @@ func ExampleExpectStatus() {
 }
 
 func ExampleExpectHeader() {
-	t := TestingT // t would be a *testing.T
+	var t *testing.T
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 

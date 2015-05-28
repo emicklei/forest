@@ -18,10 +18,10 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 		return false
 	}
 	if r.StatusCode != status {
-		t.Error(serrorf("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
 		if testing.Verbose() {
 			Dump(t, r)
 		}
+		t.Fatal(serrorf("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
 		return false
 	}
 	return true
