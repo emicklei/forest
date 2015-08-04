@@ -49,7 +49,8 @@ type skippeable interface {
 // SkipUnless will Skip the test unless the LABELS environment variable includes any of the provided labels.
 //
 //	LABELS=integration,nightly go test -v
-func SkipUnless(s skippeable, labels ...string) {
+//
+func SkipUnless(t skippeable, labels ...string) {
 	env := strings.Split(os.Getenv("LABELS"), ",")
 	for _, each := range labels {
 		for _, other := range env {
@@ -58,7 +59,7 @@ func SkipUnless(s skippeable, labels ...string) {
 			}
 		}
 	}
-	s.Skipf("skipped because provided LABELS=%v does not include any of %v", env, labels)
+	t.Skipf("skipped because provided LABELS=%v does not include any of %v", env, labels)
 }
 
 func headersString(h http.Header) string {
