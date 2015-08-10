@@ -99,13 +99,21 @@ func TestThatPathCanBeOverriden(t *testing.T) {
 	}
 }
 
+func TestThatOneQueryParameterCanBeAdded(t *testing.T) {
+	conf := NewConfig("/a")
+	conf.Query("b", 100)
+	if got, want := conf.pathAndQuery(), "/a?b=100"; got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestThatQueryParametersCanBeAddedToTheUri(t *testing.T) {
 	conf := NewConfig("/test")
 	conf.Query("zoom", true)
 	conf.Query("scale", 1)
 	conf.Query("slash", "/")
-	if conf.pathAndQuery() != "/test/scale=1&slash=%2F&zoom=true" {
-		t.Errorf("got %v want %v", conf.pathAndQuery(), "/test/scale=1&slash=%2F&zoom=true")
+	if got, want := conf.pathAndQuery(), "/test?scale=1&slash=%2F&zoom=true"; got != want {
+		t.Errorf("got %v want %v", got, want)
 	}
 }
 

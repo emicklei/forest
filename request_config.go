@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"strings"
 )
 
@@ -88,7 +87,10 @@ func (r *RequestConfig) Body(body string) *RequestConfig {
 }
 
 func (r *RequestConfig) pathAndQuery() string {
-	return path.Join(r.URI, r.Values.Encode())
+	if len(r.Values) == 0 {
+		return r.URI
+	}
+	return fmt.Sprintf("%s?%s", r.URI, r.Values.Encode())
 }
 
 // Content encodes the payload conform the content type given.
