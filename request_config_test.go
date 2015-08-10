@@ -126,3 +126,23 @@ func TestThatPathParametersAndSubstitutedInTheUri(t *testing.T) {
 		t.Errorf("got %s want %s", pq, want)
 	}
 }
+
+func TestThatColonParameterIsSubstituted(t *testing.T) {
+	conf := NewConfig("")
+	conf.Path("/:p1/messages", "order-queue")
+	pq := conf.pathAndQuery()
+	want := "/order-queue/messages"
+	if pq != want {
+		t.Errorf("got %s want %s", pq, want)
+	}
+}
+
+func TestThatStarParameterIsSubstituted(t *testing.T) {
+	conf := NewConfig("")
+	conf.Path("/:p1/messages", "order-queue")
+	pq := conf.pathAndQuery()
+	want := "/order-queue/messages"
+	if pq != want {
+		t.Errorf("got %s want %s", pq, want)
+	}
+}

@@ -42,6 +42,8 @@ func (r *RequestConfig) Do(block func(config *RequestConfig)) *RequestConfig {
 
 // Path sets the URL path with optional path parameters.
 // format example: /v1/persons/{param}/ + 42 => /v1/persons/42
+// format example: /v1/persons/:param/ + 42 => /v1/persons/42
+// format example: /v1/assets/*rest +  js/some/file.js => /v1/assets/js/some/file.js
 func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 	var uri bytes.Buffer
 	p := 0
@@ -51,7 +53,15 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 			continue
 		}
 		uri.WriteString("/")
-		if strings.HasPrefix(each, "{") && strings.HasSuffix(each, "}") {
+
+		if strings.HasPrefix(each, "*") {
+			// treat remainder as is
+			uri.WriteString(fmt.Sprintf("%v", pathParams[p]))
+			break
+		}
+
+		if strings.HasPrefix(each, ":") ||
+			(strings.HasPrefix(each, "{") && strings.HasSuffix(each, "}")) {
 			if p == len(pathParams) {
 				// abort
 				r.URI = pathTemplate
