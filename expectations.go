@@ -60,7 +60,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		return
 	}
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
@@ -85,7 +85,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		return
 	}
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
@@ -109,7 +109,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) {
 		return
 	}
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	callback(string(data))
 }
@@ -128,7 +128,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) {
 		return
 	}
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
@@ -150,7 +150,7 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) {
 		return
 	}
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	err = json.Unmarshal(data, doc)
 	if err != nil {

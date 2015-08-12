@@ -36,7 +36,7 @@ func Dump(t T, resp *http.Response) {
 		}
 		resp.Body.Close()
 		// put the body back for re-reads
-		resp.Body = &closeableReader{bytes.NewReader(body)}
+		resp.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
 	buffer.WriteString("\n")
 	t.Logf(buffer.String())

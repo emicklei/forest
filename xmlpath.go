@@ -30,7 +30,7 @@ func XMLPath(t T, r *http.Response, xpath string) interface{} {
 	}
 	root, err := xmlpath.Parse(bytes.NewReader(data))
 	// put the body back for re-reads
-	r.Body = &closeableReader{bytes.NewReader(data)}
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
 
 	if err != nil {
 		t.Error(serrorf("XMLPath: unable to parse xml:%v", err))
