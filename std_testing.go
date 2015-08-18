@@ -25,16 +25,19 @@ type logging struct {
 	doExit bool
 }
 
+// LoggingPrintf is the function used by TestingT to produce logging on Logf,Error and Fatal.
+var LoggingPrintf = fmt.Printf
+
 func (f logging) Logf(format string, args ...interface{}) {
-	fmt.Printf("\tinfo : "+tabify(format)+"\n", args...)
+	LoggingPrintf("\tinfo : "+tabify(format)+"\n", args...)
 }
 
 func (f logging) Error(args ...interface{}) {
-	fmt.Printf("\terror: "+tabify("%s")+"\n", args)
+	LoggingPrintf("\terror: "+tabify("%s")+"\n", args)
 }
 
 func (f logging) Fatal(args ...interface{}) {
-	fmt.Printf("\tfatal: "+tabify("%s")+"\n", args...)
+	LoggingPrintf("\tfatal: "+tabify("%s")+"\n", args...)
 	if f.doExit {
 		os.Exit(1)
 	}
