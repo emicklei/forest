@@ -146,3 +146,11 @@ func TestThatStarParameterIsSubstituted(t *testing.T) {
 		t.Errorf("got %s want %s", pq, want)
 	}
 }
+
+func TestThatContentCanBeStringAsIs(t *testing.T) {
+	conf := NewConfig("")
+	conf.Content("{}", "application/json")
+	if conf.BodyReader == nil {
+		t.Error("expected BodyReader initialized with reader on string")
+	}
+}

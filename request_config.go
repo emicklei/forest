@@ -103,10 +103,16 @@ func (r *RequestConfig) pathAndQuery() string {
 	return fmt.Sprintf("%s?%s", r.URI, r.Values.Encode())
 }
 
-// Content encodes the payload conform the content type given.
-// Supported Content-Type values: application/json, application/xml, text/plain
+// Content encodes (marshals) the payload conform the content type given.
+// If the payload is already a string (JSON,XML,plain) then it is used as is.
+// Supported Content-Type values for marshalling: application/json, application/xml, text/plain
+// Payload can also be a slice of bytes; use application/octet-stream in that case.
 func (r *RequestConfig) Content(payload interface{}, contentType string) *RequestConfig {
 	r.Header("Content-Type", contentType)
+	if payloadAsIs, ok := payload.(string); ok {
+		r.BodyReader = strings.NewReader(payloadAsIs)
+		return r
+	}
 	if strings.Index(contentType, "application/json") != -1 {
 		data, err := json.Marshal(payload)
 		if err != nil {
