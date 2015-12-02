@@ -6,14 +6,14 @@ import (
 )
 
 func TestJSONPath(t *testing.T) {
-	r := tsAPI.GET(t, NewConfig("/json-nested-doc"))
+	r, _ := tsAPI.GET(t, NewConfig("/json-nested-doc"))
 	if v := JSONPath(t, r, ".Root.Child"); v != 12.0 {
 		t.Errorf("got %v (%T) want 12.0", v, v)
 	}
 }
 
 func TestJSONArrayPath(t *testing.T) {
-	r := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
+	r, _ := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
 	if v := JSONArrayPath(t, r, ".1.digit"); v != 2.0 {
 		t.Errorf("got %v (%T) want 2.0", v, v)
 	}

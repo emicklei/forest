@@ -18,16 +18,14 @@ func NewClient(baseURL string, httpClient *http.Client) *APITesting {
 
 // GET sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
-func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
+func (a *APITesting) GET(t T, config *RequestConfig) (*http.Response, error) {
 	httpReq, err := http.NewRequest("GET", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
 		t.Fatal(sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
-	resp, err := a.client.Do(httpReq)
-	CheckError(t, err)
-	return resp
+	return a.client.Do(httpReq)
 }
 
 // POST sends a Http request using a config (headers,body,...)

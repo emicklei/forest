@@ -10,7 +10,8 @@ func ExampleJSONArrayPath() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets").Header("Content-Type", "application/json"))
+	r, err := yourAPI.GET(t, Path("/v1/assets").Header("Content-Type", "application/json"))
+	CheckError(t, err)
 	// if the content looks like this
 	// [
 	// { "id" : "artreyu", "type" : "tool" }
@@ -26,7 +27,8 @@ func ExampleJSONPath() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Content-Type", "application/json"))
+	r, err := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Content-Type", "application/json"))
+	CheckError(t, err)
 	// if the content looks like this
 	// { "id" : "artreyu", "type" : "tool" }
 	// then you can verify it using
@@ -40,7 +42,8 @@ func ExampleExpectJSONArray() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets").Header("Content-Type", "application/json"))
+	r, err := yourAPI.GET(t, Path("/v1/assets").Header("Content-Type", "application/json"))
+	CheckError(t, err)
 	ExpectJSONArray(t, r, func(array []interface{}) {
 		// here you should inspect the array for expected content
 		// and use t (*testing.T) to report a failure.
@@ -52,7 +55,8 @@ func ExampleExpectJSONHash() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets/artreyu/descriptor").Header("Content-Type", "application/json"))
+	r, err := yourAPI.GET(t, Path("/v1/assets/artreyu/descriptor").Header("Content-Type", "application/json"))
+	CheckError(t, err)
 	ExpectJSONHash(t, r, func(hash map[string]interface{}) {
 		// here you should inspect the hash for expected content
 		// and use t (*testing.T) to report a failure.
@@ -67,7 +71,8 @@ func ExampleExpectXMLDocument() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets").Header("Accept", "application/xml"))
+	r, err := yourAPI.GET(t, Path("/v1/assets").Header("Accept", "application/xml"))
+	CheckError(t, err)
 
 	var root YourType // YourType must reflect the expected document structure
 	ExpectXMLDocument(t, r, &root)
@@ -80,7 +85,8 @@ func ExampleXMLPath() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	r, err := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	CheckError(t, err)
 	// if the content looks like this
 	// <?xml version="1.0" ?>
 	// <asset>
@@ -98,7 +104,8 @@ func ExampleExpectStatus() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	r, err := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	CheckError(t, err)
 	ExpectStatus(t, r, 200)
 }
 
@@ -107,6 +114,7 @@ func ExampleExpectHeader() {
 
 	yourAPI := NewClient("http://api.yourservices.com", new(http.Client)) // yourAPI could be a package variable
 
-	r := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	r, err := yourAPI.GET(t, Path("/v1/assets/artreyu").Header("Accept", "application/xml"))
+	CheckError(t, err)
 	ExpectHeader(t, r, "Content-Type", "application/xml")
 }
