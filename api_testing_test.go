@@ -31,12 +31,17 @@ func TestPut404(t *testing.T) {
 	ExpectStatus(t, r, 404)
 }
 
-//func TestPutWithInvalidUrlIsCaptured(t *testing.T) {
-//	captureStdout(t, func() {
-//		tsApi.PUT(TestingT, NewConfig("#/#"))
-//	}, func(out string) {
-//		if !strings.Contains(out, "no Host in request URL") {
-//			t.Errorf("different error output:[%s]", out)
-//		}
-//	})
-//}
+func TestPut404UsingDo(t *testing.T) {
+	r, err := tsAPI.Do("PUT", Path("/{code}", 404))
+	if err != nil {
+		t.Fail()
+	}
+	ExpectStatus(t, r, 404)
+}
+
+func TestDoWithInvalidUrl(t *testing.T) {
+	_, err := tsAPI.Do("HEAD", Path(":"))
+	if err == nil {
+		t.Fail()
+	}
+}

@@ -85,3 +85,14 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	CheckError(t, err)
 	return resp
 }
+
+// Do sends a Http request using a Http method (GET,PUT,POST,....) and config (headers,...)
+// The request is not logged and any URL build error or send error will be returned.
+func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, error) {
+	httpReq, err := http.NewRequest(method, a.BaseURL+config.pathAndQuery(), config.BodyReader)
+	if err != nil {
+		return nil, err
+	}
+	copyHeaders(config.HeaderMap, httpReq.Header)
+	return a.client.Do(httpReq)
+}
