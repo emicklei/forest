@@ -48,3 +48,6 @@ func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 func Errorf(t *testing.T, format string, args ...interface{}) {
 	t.Error(Scolorf(ErrorColorSyntaxCode, format, args...))
 }
+
+// DEPRECATED
+var FailMessagePrefix = ""
