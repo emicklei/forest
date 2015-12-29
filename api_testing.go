@@ -63,7 +63,7 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("DELETE", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
-		t.Fatal(sfatalf("DELETE: invalid Url:%s", FailMessagePrefix, a.BaseURL+config.pathAndQuery()))
+		t.Fatal(sfatalf("DELETE: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -77,7 +77,7 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	httpReq, err := http.NewRequest("PATCH", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
-		t.Fatal(sfatalf("PATCH: invalid Url:%s", FailMessagePrefix, a.BaseURL+config.pathAndQuery()))
+		t.Fatal(sfatalf("PATCH: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))

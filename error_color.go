@@ -17,9 +17,6 @@ import (
 //	go test -color=false
 var TerminalColorsEnabled = true
 
-// FailMessagePrefix is used for printing failure messages.
-var FailMessagePrefix = "\n:-( "
-
 // ErrorColorSyntaxCode requires the syntax defined on https://github.com/wsxiaoys/terminal/blob/master/color/color.go .
 // Set to an empty string to disable coloring.
 var ErrorColorSyntaxCode = "@{wR}"
@@ -42,9 +39,9 @@ func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 	plainFormatted := fmt.Sprintf(format, args...)
 	if len(syntaxCode) > 0 && TerminalColorsEnabled {
 		// cannot pass the code as a string param
-		return color.Sprintf(syntaxCode+"%s%s", FailMessagePrefix, plainFormatted)
+		return color.Sprintf(syntaxCode+"\n %s", plainFormatted)
 	}
-	return FailMessagePrefix + plainFormatted
+	return "\n " + plainFormatted
 }
 
 // Errorf calls Error on t with a colorized message
