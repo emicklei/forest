@@ -16,22 +16,29 @@ func Dump(t T, resp *http.Response) {
 	buffer.WriteString("\n")
 	buffer.WriteString(fmt.Sprintf("%v %v\n", resp.Request.Method, resp.Request.URL))
 	for k, v := range resp.Request.Header {
-		buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
+		if len(k) > 0 {
+			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
+		}
 	}
-
-	// dump response
-	buffer.WriteString("\n")
 	if resp == nil {
+		buffer.WriteString("-- no response --")
 		return
 	}
+	// dump response
+	buffer.WriteString(fmt.Sprintf("\n%s\n", resp.Status))
 	for k, v := range resp.Header {
-		buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
+		if len(k) > 0 {
+			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
+		}
 	}
 	if resp.Body != nil {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			buffer.WriteString(fmt.Sprintf("unable to read body:%v", err))
 		} else {
+			if len(body) > 0 {
+				buffer.WriteString("\n")
+			}
 			buffer.WriteString(string(body))
 		}
 		resp.Body.Close()
