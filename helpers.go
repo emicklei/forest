@@ -22,6 +22,7 @@ func Dump(t T, resp *http.Response) {
 	}
 	if resp == nil {
 		buffer.WriteString("-- no response --")
+		t.Logf(buffer.String())
 		return
 	}
 	// dump response

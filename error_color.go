@@ -41,7 +41,7 @@ func Scolorf(syntaxCode string, format string, args ...interface{}) string {
 		// cannot pass the code as a string param
 		return color.Sprintf(syntaxCode+"\n %s", plainFormatted)
 	}
-	return "\n " + plainFormatted
+	return plainFormatted
 }
 
 // Errorf calls Error on t with a colorized message
