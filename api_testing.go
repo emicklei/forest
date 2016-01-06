@@ -23,6 +23,7 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	if err != nil {
 		t.Fatal(sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
@@ -37,6 +38,7 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	if err != nil {
 		t.Fatal(sfatalf("POST: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
@@ -51,6 +53,7 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 	if err != nil {
 		t.Fatal(sfatalf("PUT: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
@@ -65,6 +68,7 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 	if err != nil {
 		t.Fatal(sfatalf("DELETE: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
@@ -79,6 +83,7 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	if err != nil {
 		t.Fatal(sfatalf("PATCH: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
@@ -93,6 +98,7 @@ func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, e
 	if err != nil {
 		return nil, err
 	}
+	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	return a.client.Do(httpReq)
 }

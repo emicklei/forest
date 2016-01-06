@@ -13,10 +13,11 @@ import (
 
 // RequestConfig holds additional information to construct a Http request.
 type RequestConfig struct {
-	URI        string
-	BodyReader io.Reader
-	HeaderMap  http.Header
-	Values     url.Values
+	URI            string
+	BodyReader     io.Reader
+	HeaderMap      http.Header
+	Values         url.Values
+	User, Password string
 }
 
 // Path is an alias for NewConfig
@@ -75,6 +76,13 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 		}
 	}
 	r.URI = uri.String()
+	return r
+}
+
+// BasicAuth sets the credentials for Basic Authentication (if username is not empty)
+func (r *RequestConfig) BasicAuth(username, password string) *RequestConfig {
+	r.User = username
+	r.Password = password
 	return r
 }
 

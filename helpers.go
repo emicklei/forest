@@ -84,3 +84,9 @@ func copyHeaders(from, to http.Header) {
 		}
 	}
 }
+
+func setBasicAuth(config *RequestConfig, req *http.Request) {
+	if len(config.User) > 0 {
+		req.SetBasicAuth(config.User, config.Password)
+	}
+}
