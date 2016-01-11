@@ -2,6 +2,7 @@ package forest
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/wsxiaoys/terminal/color"
@@ -16,6 +17,11 @@ import (
 //
 //	go test -color=false
 var TerminalColorsEnabled = true
+
+// Check for presence of the TERMCOLORS environment variable to set the TerminalColorsEnabled setting.
+func init() {
+	TerminalColorsEnabled = os.Getenv("TERMCOLORS") != "false"
+}
 
 // ErrorColorSyntaxCode requires the syntax defined on https://github.com/wsxiaoys/terminal/blob/master/color/color.go .
 // Set to an empty string to disable coloring.
