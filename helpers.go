@@ -35,7 +35,12 @@ func Dump(t T, resp *http.Response) {
 	if resp.Body != nil {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			buffer.WriteString(fmt.Sprintf("unable to read body:%v", err))
+			if resp.StatusCode/100 == 3 {
+				// redirect closes body ; nothing to read
+				buffer.WriteString("\n")
+			} else {
+				buffer.WriteString(fmt.Sprintf("unable to read body:%v", err))
+			}
 		} else {
 			if len(body) > 0 {
 				buffer.WriteString("\n")
