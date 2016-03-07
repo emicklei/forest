@@ -28,7 +28,7 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
-	return resp
+	return ensureResponse(httpReq, resp)
 }
 
 // POST sends a Http request using a config (headers,body,...)
@@ -43,7 +43,7 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
-	return resp
+	return ensureResponse(httpReq, resp)
 }
 
 // PUT sends a Http request using a config (headers,body,...)
@@ -58,7 +58,7 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
-	return resp
+	return ensureResponse(httpReq, resp)
 }
 
 // DELETE sends a Http request using a config (headers,...)
@@ -73,7 +73,7 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
-	return resp
+	return ensureResponse(httpReq, resp)
 }
 
 // PATCH sends a Http request using a config (headers,...)
@@ -88,7 +88,7 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	t.Logf("\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
-	return resp
+	return ensureResponse(httpReq, resp)
 }
 
 // Do sends a Http request using a Http method (GET,PUT,POST,....) and config (headers,...)
@@ -100,5 +100,6 @@ func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, e
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
-	return a.client.Do(httpReq)
+	resp, err := a.client.Do(httpReq)
+	return ensureResponse(httpReq, resp), err
 }

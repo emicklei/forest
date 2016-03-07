@@ -95,3 +95,13 @@ func setBasicAuth(config *RequestConfig, req *http.Request) {
 		req.SetBasicAuth(config.User, config.Password)
 	}
 }
+
+func ensureResponse(req *http.Request, resp *http.Response) *http.Response {
+	if resp != nil {
+		return resp
+	}
+	// wrap the request into an empty response ; Body must be nil
+	wrap := new(http.Response)
+	wrap.Request = req
+	return wrap
+}
