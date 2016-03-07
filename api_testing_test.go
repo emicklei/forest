@@ -1,6 +1,9 @@
 package forest
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+)
 
 func TestPost(t *testing.T) {
 	r := tsAPI.POST(t, Path("/echo").Body("data").Header("ECHO", "ping"))
@@ -43,5 +46,14 @@ func TestDoWithInvalidUrl(t *testing.T) {
 	_, err := tsAPI.Do("HEAD", Path(":"))
 	if err == nil {
 		t.Fail()
+	}
+}
+
+func TestBasicAuth(t *testing.T) {
+	cfg := NewConfig("/").BasicAuth("a", "b")
+	req, _ := http.NewRequest("GET", "/", nil)
+	setBasicAuth(cfg, req)
+	if len(req.Header.Get("Authorization")) == 0 {
+		t.Errorf("expected Authorization header")
 	}
 }
