@@ -99,6 +99,7 @@ func (r *RequestConfig) Header(name, value string) *RequestConfig {
 }
 
 // Body sets the playload as is. No content type is set.
+// It sets the BodyReader field of the RequestConfig.
 func (r *RequestConfig) Body(body string) *RequestConfig {
 	r.BodyReader = strings.NewReader(body)
 	return r
@@ -115,6 +116,7 @@ func (r *RequestConfig) pathAndQuery() string {
 // If the payload is already a string (JSON,XML,plain) then it is used as is.
 // Supported Content-Type values for marshalling: application/json, application/xml, text/plain
 // Payload can also be a slice of bytes; use application/octet-stream in that case.
+// It sets the BodyReader field of the RequestConfig.
 func (r *RequestConfig) Content(payload interface{}, contentType string) *RequestConfig {
 	r.Header("Content-Type", contentType)
 	if payloadAsIs, ok := payload.(string); ok {
@@ -154,5 +156,11 @@ func (r *RequestConfig) Content(payload interface{}, contentType string) *Reques
 		return r
 	}
 	r.Body(fmt.Sprintf("cannot encode payload, unknown content type:%s", contentType))
+	return r
+}
+
+// Read sets the BodyReader for content to send with the request.
+func (r *RequestConfig) Read(bodyReader io.Reader) *RequestConfig {
+	r.BodyReader = bodyReader
 	return r
 }
