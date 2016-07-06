@@ -8,7 +8,7 @@ functional tests that call a running REST based WebService.
 [![GoDoc](https://godoc.org/github.com/emicklei/forest?status.svg)](https://godoc.org/github.com/emicklei/forest)
 
 
-[Introduction Blog Post](http://ernestmicklei.com/2015/07/04/testing-your-rest-api-in-go-with-forest/)
+[Introduction Blog Post](http://ernestmicklei.com/2015/07/testing-your-rest-api-in-go-with-forest/)
 
 		
 (c) 2015, http://ernestmicklei.com. MIT License	
