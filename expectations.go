@@ -59,6 +59,10 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		t.Error(serrorf("ExpectJSONHash: no response available"))
 		return false
 	}
+	if r.Body == nil {
+		t.Error(serrorf("ExpectJSONHash: no body to read"))
+		return false
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -84,6 +88,10 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) bool {
 	if r == nil {
 		t.Error(serrorf("ExpectJSONArray: no response available"))
+		return false
+	}
+	if r.Body == nil {
+		t.Error(serrorf("ExpectJSONArray: no body to read"))
 		return false
 	}
 	data, err := ioutil.ReadAll(r.Body)
@@ -113,6 +121,10 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 		t.Error(serrorf("ExpectString: no response available"))
 		return false
 	}
+	if r.Body == nil {
+		t.Error(serrorf("ExpectString: no body to read"))
+		return false
+	}
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -132,6 +144,10 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 	if r == nil {
 		t.Error(serrorf("ExpectXMLDocument: no response available"))
+		return false
+	}
+	if r.Body == nil {
+		t.Error(serrorf("ExpectXMLDocument: no body to read"))
 		return false
 	}
 	data, err := ioutil.ReadAll(r.Body)
@@ -156,6 +172,10 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 func ExpectJSONDocument(t T, r *http.Response, doc interface{}) bool {
 	if r == nil {
 		t.Error(serrorf("ExpectJSONDocument: no response available"))
+		return false
+	}
+	if r.Body == nil {
+		t.Error(serrorf("ExpectJSONDocument: no body to read"))
 		return false
 	}
 	data, err := ioutil.ReadAll(r.Body)

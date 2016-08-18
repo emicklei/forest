@@ -43,7 +43,7 @@ func TestPut404UsingDo(t *testing.T) {
 }
 
 func TestDoWithInvalidUrl(t *testing.T) {
-	_, err := tsAPI.Do("HEAD", Path(":"))
+	_, err := tsAPI.Do("HEAD", Path("::"))
 	if err == nil {
 		t.Fail()
 	}
