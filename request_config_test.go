@@ -3,6 +3,7 @@ package forest
 import (
 	"encoding/hex"
 	"io/ioutil"
+	"net/url"
 	"testing"
 )
 
@@ -119,9 +120,19 @@ func TestThatQueryParametersCanBeAddedToTheUri(t *testing.T) {
 
 func TestThatPathParametersAndSubstitutedInTheUri(t *testing.T) {
 	conf := NewConfig("")
-	conf.Path("/{p1}/with/{p2}", "play", "/s:las:h/")
+	conf.Path("/{p1}/with/{p2}", "play", url.QueryEscape("/s:las:h/"))
 	pq := conf.pathAndQuery()
 	want := "/play/with/%2Fs%3Alas%3Ah%2F"
+	if pq != want {
+		t.Errorf("got %s want %s", pq, want)
+	}
+}
+
+func TestThatPathParametersAreEncoded(t *testing.T) {
+	conf := NewConfig("")
+	conf.Path("/{p1}/with/{p2}", "play", " me")
+	pq := conf.pathAndQuery()
+	want := "/play/with/%20me"
 	if pq != want {
 		t.Errorf("got %s want %s", pq, want)
 	}

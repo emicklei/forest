@@ -105,3 +105,18 @@ func ensureResponse(req *http.Request, resp *http.Response) *http.Response {
 	wrap.Request = req
 	return wrap
 }
+
+func URLPathEncode(path string) string {
+	buf := new(bytes.Buffer)
+	for _, each := range path {
+		switch each {
+		case '+':
+			buf.WriteString("%20")
+		case ' ':
+			buf.WriteString("%20")
+		default:
+			buf.WriteRune(each)
+		}
+	}
+	return buf.String()
+}

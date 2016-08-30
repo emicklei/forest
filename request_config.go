@@ -68,14 +68,14 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 				r.URI = pathTemplate
 				return r
 			}
-			param := fmt.Sprintf("%v", pathParams[p])
-			uri.WriteString(url.QueryEscape(param))
+			uri.WriteString(fmt.Sprintf("%v", pathParams[p]))
 			p++
 		} else {
 			uri.WriteString(each)
 		}
 	}
-	r.URI = uri.String()
+	// need to do path encoding
+	r.URI = URLPathEncode(uri.String())
 	return r
 }
 
