@@ -13,7 +13,7 @@ type car struct {
 }
 
 func TestThatContentIsMarshalledToXml(t *testing.T) {
-	conf := NewConfig("/")
+	conf := Path("/")
 	c := car{
 		Brand: "Tesla",
 		Hp:    500,
@@ -32,7 +32,7 @@ func TestThatContentIsMarshalledToXml(t *testing.T) {
 }
 
 func TestThatContentIsMarshalledToJson(t *testing.T) {
-	conf := NewConfig("/")
+	conf := Path("/")
 	c := car{
 		Brand: "Tesla",
 		Hp:    500,
@@ -51,7 +51,7 @@ func TestThatContentIsMarshalledToJson(t *testing.T) {
 }
 
 func TestThatContentIsMarshalledToPlainText(t *testing.T) {
-	conf := NewConfig("/")
+	conf := Path("/")
 	conf.Content("hello", "text/plain;charset=utf8")
 	if conf.BodyReader == nil {
 		t.Fatalf("expected body reader, got nil")
@@ -66,7 +66,7 @@ func TestThatContentIsMarshalledToPlainText(t *testing.T) {
 }
 
 func TestThatContentCanBeBytes(t *testing.T) {
-	conf := NewConfig("/")
+	conf := Path("/")
 	conf.Content([]byte{1, 2, 3, 4}, "application/octet-stream")
 	if conf.BodyReader == nil {
 		t.Fatalf("expected body reader, got nil")
@@ -85,7 +85,7 @@ func setXHeader(r *RequestConfig) {
 }
 
 func TestThatCustomDoIsCalled(t *testing.T) {
-	conf := NewConfig("/")
+	conf := Path("/")
 	conf.Do(setXHeader)
 	if conf.HeaderMap.Get("X") != "Y" {
 		t.Fail()
@@ -93,7 +93,7 @@ func TestThatCustomDoIsCalled(t *testing.T) {
 }
 
 func TestThatPathCanBeOverriden(t *testing.T) {
-	conf := NewConfig("/a")
+	conf := Path("/a")
 	conf.Path("/b")
 	if conf.URI != "/b" {
 		t.Errorf("got %v want %v", conf.URI, "/b")
@@ -109,7 +109,7 @@ func TestThatOneQueryParameterCanBeAdded(t *testing.T) {
 }
 
 func TestThatQueryParametersCanBeAddedToTheUri(t *testing.T) {
-	conf := NewConfig("/test")
+	conf := Path("/test")
 	conf.Query("zoom", true)
 	conf.Query("scale", 1)
 	conf.Query("slash", "/")
@@ -119,8 +119,7 @@ func TestThatQueryParametersCanBeAddedToTheUri(t *testing.T) {
 }
 
 func TestThatPathParametersAndSubstitutedInTheUri(t *testing.T) {
-	conf := NewConfig("")
-	conf.Path("/{p1}/with/{p2}", "play", url.QueryEscape("/s:las:h/"))
+	conf := Path("/{p1}/with/{p2}", "play", url.QueryEscape("/s:las:h/"))
 	pq := conf.pathAndQuery()
 	want := "/play/with/%2Fs%3Alas%3Ah%2F"
 	if pq != want {
@@ -129,8 +128,7 @@ func TestThatPathParametersAndSubstitutedInTheUri(t *testing.T) {
 }
 
 func TestThatPathParametersAreEncoded(t *testing.T) {
-	conf := NewConfig("")
-	conf.Path("/{p1}/with/{p2}", "play", " me")
+	conf := Path("/{p1}/with/{p2}", "play", " me")
 	pq := conf.pathAndQuery()
 	want := "/play/with/%20me"
 	if pq != want {
@@ -139,8 +137,7 @@ func TestThatPathParametersAreEncoded(t *testing.T) {
 }
 
 func TestThatColonParameterIsSubstituted(t *testing.T) {
-	conf := NewConfig("")
-	conf.Path("/:p1/messages", "order-queue")
+	conf := Path("/:p1/messages", "order-queue")
 	pq := conf.pathAndQuery()
 	want := "/order-queue/messages"
 	if pq != want {
@@ -149,8 +146,7 @@ func TestThatColonParameterIsSubstituted(t *testing.T) {
 }
 
 func TestThatStarParameterIsSubstituted(t *testing.T) {
-	conf := NewConfig("")
-	conf.Path("/:p1/messages", "order-queue")
+	conf := Path("/:p1/messages", "order-queue")
 	pq := conf.pathAndQuery()
 	want := "/order-queue/messages"
 	if pq != want {
@@ -159,9 +155,18 @@ func TestThatStarParameterIsSubstituted(t *testing.T) {
 }
 
 func TestThatContentCanBeStringAsIs(t *testing.T) {
-	conf := NewConfig("")
+	conf := Path("")
 	conf.Content("{}", "application/json")
 	if conf.BodyReader == nil {
 		t.Error("expected BodyReader initialized with reader on string")
+	}
+}
+
+func TestThatPathCanContainEmptyElements(t *testing.T) {
+	conf := Path("/books/{}/{}", "", "")
+	pq := conf.pathAndQuery()
+	want := "/books//"
+	if pq != want {
+		t.Errorf("got %s want %s", pq, want)
 	}
 }

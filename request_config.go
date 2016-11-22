@@ -49,8 +49,8 @@ func (r *RequestConfig) Path(pathTemplate string, pathParams ...interface{}) *Re
 	var uri bytes.Buffer
 	p := 0
 	tokens := strings.Split(pathTemplate, "/")
-	for _, each := range tokens {
-		if len(each) == 0 {
+	for i, each := range tokens {
+		if len(each) == 0 && i == 0 { // skip leading space
 			continue
 		}
 		uri.WriteString("/")
