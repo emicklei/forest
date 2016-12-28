@@ -22,7 +22,7 @@ func Dump(t T, resp *http.Response) {
 	}
 	if resp == nil {
 		buffer.WriteString("-- no response --")
-		t.Logf(buffer.String())
+		Logf(t, buffer.String())
 		return
 	}
 	// dump response
@@ -52,7 +52,7 @@ func Dump(t T, resp *http.Response) {
 		resp.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
 	buffer.WriteString("\n")
-	t.Logf(buffer.String())
+	Logf(t, buffer.String())
 }
 
 type skippeable interface {

@@ -11,6 +11,6 @@ functional tests that call a running REST based WebService.
 [Introduction Blog Post](http://ernestmicklei.com/2015/07/testing-your-rest-api-in-go-with-forest/)
 
 		
-(c) 2015, http://ernestmicklei.com. MIT License	
+(c) 2016, http://ernestmicklei.com. MIT License	
 
 ![forest](https://s3.amazonaws.com/public.philemonworks.com/forest/treeandskyBottom275.jpg)

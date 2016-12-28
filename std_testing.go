@@ -15,6 +15,10 @@ type T interface {
 	Error(args ...interface{})
 	// Fatal is equivalent to Log followed by FailNow.
 	Fatal(args ...interface{})
+	// FailNow marks the function as having failed and stops its execution.
+	FailNow()
+	// Fail marks the function as having failed but continues execution.
+	Fail()
 }
 
 // TestingT provides a sub-api of testing.T. Its purpose is to allow the use of this package in TestMain(m).
@@ -42,6 +46,14 @@ func (f logging) Fatal(args ...interface{}) {
 		os.Exit(1)
 	}
 }
+
+func (f logging) FailNow() {
+	if f.doExit {
+		os.Exit(1)
+	}
+}
+
+func (f logging) Fail() {}
 
 func tabify(format string) string {
 	if strings.HasPrefix(format, "\n") {

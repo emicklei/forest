@@ -15,3 +15,5 @@ func (m *mockedT) Error(args ...interface{}) {
 func (m *mockedT) Fatal(args ...interface{}) {
 	m.fatalMessage = fmt.Sprint(args...)
 }
+func (m *mockedT) FailNow() {}
+func (m *mockedT) Fail()    {}
