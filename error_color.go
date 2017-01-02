@@ -55,5 +55,7 @@ func Errorf(t *testing.T, format string, args ...interface{}) {
 	t.Error(Scolorf(ErrorColorSyntaxCode, format, args...))
 }
 
-// DEPRECATED
-var FailMessagePrefix = ""
+// Fatalf calls Fatal on t with a colorized message
+func Fatalf(t *testing.T, format string, args ...interface{}) {
+	t.Fatal(Scolorf(FatalColorSyntaxCode, format, args...))
+}
