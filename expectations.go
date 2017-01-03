@@ -6,11 +6,18 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"net/http"
-	"testing"
 )
 
+var verboseOnFailure = false
+
+// VerboseOnFailure (default is false) will produce more information about the request and response when a failure is detected on an expectation.
+// This setting is not the same but related to the value of testing.Verbose().
+func VerboseOnFailure(verbose bool) {
+	verboseOnFailure = verbose
+}
+
 // ExpectStatus inspects the response status code.
-// If the value is not expected, the complete request, response is logged (iff verbose).
+// If the value is not expected, the complete request, response is logged (iff verboseOnFailure) and the test is aborted.
 // Return true if the status is as expected.
 func ExpectStatus(t T, r *http.Response, status int) bool {
 	if r == nil {
@@ -18,7 +25,7 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 		return false
 	}
 	if r.StatusCode != status {
-		if testing.Verbose() {
+		if verboseOnFailure {
 			Dump(t, r)
 		}
 		logfatal(t, serrorf("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
@@ -66,6 +73,9 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectJSONHash: unable to read response body:%v", err))
 		return false
 	}
@@ -75,6 +85,9 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectJSONHash: unable to unmarshal Json:%v", err))
 		return false
 	}
@@ -97,6 +110,9 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectJSONArray: unable to read response body:%v", err))
 		return false
 	}
@@ -106,6 +122,9 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectJSONArray: unable to unmarshal Json:%v", err))
 		return false
 	}
@@ -128,6 +147,9 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectString: unable to read response body:%v", err))
 		return false
 	}
@@ -153,6 +175,9 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectXMLDocument: unable to read response body:%v", err))
 		return false
 	}
@@ -161,6 +186,9 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectXMLDocument: unable to unmarshal Xml:%v", err))
 	}
 	return err == nil
@@ -189,6 +217,9 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) bool {
 
 	err = json.Unmarshal(data, doc)
 	if err != nil {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectJSONDocument: unable to unmarshal Json:%v", err))
 	}
 	return err == nil
