@@ -8,7 +8,7 @@ import (
 )
 
 func TestThatInfoLoggingIsPrinted(t *testing.T) {
-	l := logging{false}
+	l := Logger{true, true, false}
 	captureStdout(t, func() {
 		l.Logf("%s", "logf")
 	}, func(output string) {
@@ -19,7 +19,7 @@ func TestThatInfoLoggingIsPrinted(t *testing.T) {
 }
 
 func TestThatErrorLoggingIsPrinted(t *testing.T) {
-	l := logging{false}
+	l := Logger{true, true, false}
 	captureStdout(t, func() {
 		l.Error("logf")
 	}, func(output string) {
@@ -30,7 +30,7 @@ func TestThatErrorLoggingIsPrinted(t *testing.T) {
 }
 
 func TestThatFatalLoggingIsPrinted(t *testing.T) {
-	l := logging{false}
+	l := Logger{true, true, false}
 	captureStdout(t, func() {
 		l.Fatal("logf")
 	}, func(output string) {

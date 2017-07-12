@@ -2,7 +2,6 @@ package forest
 
 import (
 	"fmt"
-	"os"
 	"strings"
 )
 
@@ -22,38 +21,10 @@ type T interface {
 }
 
 // TestingT provides a sub-api of testing.T. Its purpose is to allow the use of this package in TestMain(m).
-var TestingT = logging{true}
-
-type logging struct {
-	// this field exists for testing this package only
-	doExit bool
-}
+var TestingT = Logger{InfoEnabled: true, ErrorEnabled: true, ExitOnFatal: true}
 
 // LoggingPrintf is the function used by TestingT to produce logging on Logf,Error and Fatal.
 var LoggingPrintf = fmt.Printf
-
-func (f logging) Logf(format string, args ...interface{}) {
-	LoggingPrintf("\tinfo : "+tabify(format)+"\n", args...)
-}
-
-func (f logging) Error(args ...interface{}) {
-	LoggingPrintf("\terror: "+tabify("%s")+"\n", args)
-}
-
-func (f logging) Fatal(args ...interface{}) {
-	LoggingPrintf("\tfatal: "+tabify("%s")+"\n", args...)
-	if f.doExit {
-		os.Exit(1)
-	}
-}
-
-func (f logging) FailNow() {
-	if f.doExit {
-		os.Exit(1)
-	}
-}
-
-func (f logging) Fail() {}
 
 func tabify(format string) string {
 	if strings.HasPrefix(format, "\n") {
