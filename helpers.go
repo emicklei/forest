@@ -90,6 +90,14 @@ func copyHeaders(from, to http.Header) {
 	}
 }
 
+func setFormData(config *RequestConfig, req *http.Request) {
+	// set form data if available
+	if len(config.FormData) > 0 {
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Body = ioutil.NopCloser(strings.NewReader(config.FormData.Encode()))
+	}
+}
+
 func setBasicAuth(config *RequestConfig, req *http.Request) {
 	if len(config.User) > 0 {
 		req.SetBasicAuth(config.User, config.Password)

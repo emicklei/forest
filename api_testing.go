@@ -25,6 +25,7 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -40,6 +41,7 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -55,6 +57,7 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -70,6 +73,7 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -85,6 +89,7 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
@@ -100,6 +105,7 @@ func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, e
 	}
 	setBasicAuth(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
+	setFormData(config, httpReq)
 	resp, err := a.client.Do(httpReq)
 	return ensureResponse(httpReq, resp), err
 }

@@ -13,10 +13,12 @@ import (
 
 // RequestConfig holds additional information to construct a Http request.
 type RequestConfig struct {
-	URI            string
-	BodyReader     io.Reader
-	HeaderMap      http.Header
+	URI        string
+	BodyReader io.Reader
+	HeaderMap  http.Header
+	// for Query parameters
 	Values         url.Values
+	FormData       url.Values
 	User, Password string
 }
 
@@ -162,5 +164,11 @@ func (r *RequestConfig) Content(payload interface{}, contentType string) *Reques
 // Read sets the BodyReader for content to send with the request.
 func (r *RequestConfig) Read(bodyReader io.Reader) *RequestConfig {
 	r.BodyReader = bodyReader
+	return r
+}
+
+// Form set the FormData values e.g for POST operation.
+func (r *RequestConfig) Form(bodyData url.Values) *RequestConfig {
+	r.FormData = bodyData
 	return r
 }

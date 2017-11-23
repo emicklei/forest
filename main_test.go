@@ -53,6 +53,15 @@ func TestMain(m *testing.M) {
 			</Root>`)
 			return
 		}
+		if strings.HasSuffix(r.URL.Path, "form") {
+			w.Header().Add("Content-Type", "text/plain")
+			if err := r.ParseForm(); err != nil {
+				w.WriteHeader(400)
+				return
+			}
+			fmt.Fprintln(w, fmt.Sprintf("%v", r.PostForm))
+			return
+		}
 		if strings.HasSuffix(r.URL.Path, "echo") {
 			w.Header().Add("Content-Type", "application/octet-stream")
 			w.Header().Add("ECHO", r.Header.Get("ECHO"))

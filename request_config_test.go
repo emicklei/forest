@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"io/ioutil"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -169,4 +170,16 @@ func TestThatPathCanContainEmptyElements(t *testing.T) {
 	if pq != want {
 		t.Errorf("got %s want %s", pq, want)
 	}
+}
+
+func TestThatFormDataIsPresentInRequest(t *testing.T) {
+	conf := Path("/form", "", "")
+	data := url.Values{"key": []string{"value"}}
+	conf.Form(data)
+	r := tsAPI.POST(t, conf)
+	ExpectString(t, r, func(m string) {
+		if got, want := strings.Trim(m, "\n"), "map[key:[value]]"; got != want {
+			t.Errorf("got (%s) want (%s)", got, want)
+		}
+	})
 }
