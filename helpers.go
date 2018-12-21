@@ -9,6 +9,27 @@ import (
 	"strings"
 )
 
+// maskHeaderNames is used to prevent logging secrets.
+var maskHeaderNames = []string{}
+
+// MaskChar is used the create a masked header value.
+var MaskChar = "*"
+
+// MaskHeader is used to prevent logging secrets.
+func MaskHeader(name string) {
+	maskHeaderNames = append(maskHeaderNames, name)
+}
+
+// IsMaskedHeader return true if the name is part of (case-insensitive match) the MaskHeaderNames.
+func IsMaskedHeader(name string) bool {
+	for _, each := range maskHeaderNames {
+		if strings.ToLower(each) == strings.ToLower(name) {
+			return true
+		}
+	}
+	return false
+}
+
 // Dump is a convenient method to log the full contents of a request and its response.
 func Dump(t T, resp *http.Response) {
 	// dump request
@@ -16,6 +37,9 @@ func Dump(t T, resp *http.Response) {
 	buffer.WriteString("\n")
 	buffer.WriteString(fmt.Sprintf("%v %v\n", resp.Request.Method, resp.Request.URL))
 	for k, v := range resp.Request.Header {
+		if IsMaskedHeader(k) {
+			v = []string{strings.Repeat(MaskChar, len(v[0]))}
+		}
 		if len(k) > 0 {
 			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
 		}
@@ -79,7 +103,14 @@ func headersString(h http.Header) string {
 	if len(h) == 0 {
 		return ""
 	}
-	return fmt.Sprintf("%v", h)
+	masked := http.Header{}
+	for k, v := range h {
+		if IsMaskedHeader(k) {
+			v = []string{strings.Repeat(MaskChar, len(v[0]))}
+		}
+		masked[k] = v
+	}
+	return fmt.Sprintf("%v", masked)
 }
 
 func copyHeaders(from, to http.Header) {
