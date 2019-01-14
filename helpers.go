@@ -44,12 +44,26 @@ func Dump(t T, resp *http.Response) {
 			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
 		}
 	}
+	// dump request payload
+	{
+		rc, err := resp.Request.GetBody()
+		body, err := ioutil.ReadAll(rc)
+		if err != nil {
+			buffer.WriteString(fmt.Sprintf("unable to read request body:%v", err))
+		} else {
+			if len(body) > 0 {
+				buffer.WriteString("\n")
+			}
+			buffer.WriteString(string(body))
+			buffer.WriteString("\n")
+		}
+	}
+	// dump response payload
 	if resp == nil {
 		buffer.WriteString("-- no response --")
 		Logf(t, buffer.String())
 		return
 	}
-	// dump response
 	buffer.WriteString(fmt.Sprintf("\n%s\n", resp.Status))
 	for k, v := range resp.Header {
 		if len(k) > 0 {
@@ -63,7 +77,7 @@ func Dump(t T, resp *http.Response) {
 				// redirect closes body ; nothing to read
 				buffer.WriteString("\n")
 			} else {
-				buffer.WriteString(fmt.Sprintf("unable to read body:%v", err))
+				buffer.WriteString(fmt.Sprintf("unable to read response body:%v", err))
 			}
 		} else {
 			if len(body) > 0 {
