@@ -44,8 +44,8 @@ func Dump(t T, resp *http.Response) {
 			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
 		}
 	}
-	// dump request payload
-	{
+	// dump request payload, currently only available is response is available
+	if resp != nil {
 		rc, err := resp.Request.GetBody()
 		body, err := ioutil.ReadAll(rc)
 		if err != nil {
