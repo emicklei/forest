@@ -1,8 +1,15 @@
 # change log of the forest package
 
-2017-11-23
+v1.1.1
+
+- fixes problem with dumping a text response that contains Go format markers.
+
+v1.1.0
+
 - add Form to RequestConfig (thanx to Arvind Mohabir)
-2016-01-02
+
+v1.0.0
+
 - add VerboseOnFailure to have more information when a failure is detected.
 - add Fatalf (to be used instead of t.Fatal)
 - remove FailMessagePrefix package variable
