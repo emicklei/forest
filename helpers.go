@@ -90,7 +90,7 @@ func Dump(t T, resp *http.Response) {
 		resp.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
 	buffer.WriteString("\n")
-	Logf(t, buffer.String())
+	Logf(t, "%s", buffer.String())
 }
 
 type skippeable interface {
