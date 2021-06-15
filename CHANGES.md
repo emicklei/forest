@@ -1,5 +1,9 @@
 # change log of the forest package
 
+v1.2.0 [2021-06-15]
+
+- add support for GraphQL request
+
 v1.1.1
 
 - fixes problem with dumping a text response that contains Go format markers.
