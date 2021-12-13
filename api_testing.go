@@ -24,6 +24,7 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 		logfatal(t, sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -40,6 +41,7 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 		logfatal(t, sfatalf("POST: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -56,6 +58,7 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 		logfatal(t, sfatalf("PUT: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -72,6 +75,7 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 		logfatal(t, sfatalf("DELETE: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -88,6 +92,7 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 		logfatal(t, sfatalf("PATCH: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
@@ -104,6 +109,7 @@ func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, e
 		return nil, err
 	}
 	setBasicAuth(config, httpReq)
+	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
 	resp, err := a.client.Do(httpReq)

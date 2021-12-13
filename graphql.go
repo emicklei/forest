@@ -7,6 +7,8 @@ import (
 	"io"
 )
 
+type Map map[string]interface{}
+
 // GraphQLRequest is used to model both a query or a mutation request
 type GraphQLRequest struct {
 	Query         string                 `json:"query"`
@@ -22,7 +24,7 @@ func NewGraphQLRequest(query, operation string) (GraphQLRequest, error) {
 	if operation == "" {
 		return GraphQLRequest{}, errors.New("operation parameter cannot be empty")
 	}
-	return GraphQLRequest{Query: query, OperationName: operation}, nil
+	return GraphQLRequest{Query: query, OperationName: operation, Variables: map[string]interface{}{}}, nil
 }
 
 // WithVariablesFromString returns a copy of the request with decoded variables. Returns an error if the jsonhash cannot be converted.

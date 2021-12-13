@@ -30,6 +30,16 @@ func IsMaskedHeader(name string) bool {
 	return false
 }
 
+// CookieNamed returns the cookie with matching name. Returns nil if not found.
+func CookieNamed(resp *http.Response, name string) *http.Cookie {
+	for _, each := range resp.Cookies() {
+		if each.Name == name {
+			return each
+		}
+	}
+	return nil
+}
+
 // Dump is a convenient method to log the full contents of a request and its response.
 func Dump(t T, resp *http.Response) {
 	// dump request
@@ -46,7 +56,7 @@ func Dump(t T, resp *http.Response) {
 	}
 	// dump request payload, only available is there is a Body.
 	if resp != nil && resp.Request != nil && resp.Request.Body != nil {
-		rc, err := resp.Request.GetBody()
+		rc, _ := resp.Request.GetBody()
 		body, err := ioutil.ReadAll(rc)
 		if err != nil {
 			buffer.WriteString(fmt.Sprintf("unable to read request body:%v", err))
@@ -172,4 +182,10 @@ func URLPathEncode(path string) string {
 		}
 	}
 	return buf.String()
+}
+
+func setCookies(config *RequestConfig, req *http.Request) {
+	for _, each := range config.Cookies {
+		req.AddCookie(each)
+	}
 }

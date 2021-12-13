@@ -20,10 +20,14 @@ type RequestConfig struct {
 	Values         url.Values
 	FormData       url.Values
 	User, Password string
+	Cookies        []*http.Cookie
 }
 
 // Path is an alias for NewConfig
 var Path = NewConfig
+
+// NewRequestConfig is an alias for NewConfig
+var NewRequestConfig = NewConfig
 
 // NewConfig returns a new RequestConfig with initialized empty headers and query parameters.
 // See Path for an explanation of the function parameters.
@@ -97,6 +101,15 @@ func (r *RequestConfig) Query(name string, value interface{}) *RequestConfig {
 // Header adds a name=value pair to the list of header parameters.
 func (r *RequestConfig) Header(name, value string) *RequestConfig {
 	r.HeaderMap.Add(name, value)
+	return r
+}
+
+// Cookie adds a Cookie to the list of cookies to include in the request.
+func (r *RequestConfig) Cookie(c *http.Cookie) *RequestConfig {
+	if c == nil {
+		return r
+	}
+	r.Cookies = append(r.Cookies, c)
 	return r
 }
 
