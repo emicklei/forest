@@ -1,8 +1,10 @@
 package forest
 
 import (
+	"flag"
 	"fmt"
 	"strings"
+	"testing"
 )
 
 // T is the interface that this package is using from standard testing.T
@@ -21,6 +23,7 @@ type T interface {
 }
 
 // TestingT provides a sub-api of testing.T. Its purpose is to allow the use of this package in TestMain(m).
+// Deprecated, use NewTestingT() instead
 var TestingT = Logger{InfoEnabled: true, ErrorEnabled: true, ExitOnFatal: true}
 
 // LoggingPrintf is the function used by TestingT to produce logging on Logf,Error and Fatal.
@@ -31,4 +34,10 @@ func tabify(format string) string {
 		return strings.Replace(format, "\n", "\n\t\t", 1)
 	}
 	return format
+}
+
+// NewTestingT returns a T with Info enabled based on the verbose flag "-v"
+func NewTestingT() T {
+	flag.Parse()
+	return Logger{InfoEnabled: testing.Verbose(), ErrorEnabled: true, ExitOnFatal: true}
 }
