@@ -32,7 +32,20 @@ functional tests that call a running REST based WebService.
 
 ## graphql support
 
-    TOWRITE
+	query, err := forest.NewGraphQLRequest(list_matrices_query, "ListMatrices")
+	// ... handle error
+	query, err = query.WithVariablesFromString(`
+{
+	"repositoryID":"99426e24-..........-6bf9770f1fd5",
+	"page":{
+		"first":20
+	},	
+}`)
+	// ... handle error
+	cfg := forest.NewRequestConfig(...)
+	cfg.Content(query, "application/json")
+	r := SkillsAPI.POST(t, cfg)
+	ExpectStatus(t, r, 200)
 
 ## other helper functions
 
