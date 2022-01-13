@@ -32,8 +32,3 @@ func tabify(format string) string {
 	}
 	return format
 }
-
-// NewTestingT returns a T with Info,Error and Exit enabled
-func NewTestingT() T {
-	return TestingT
-}

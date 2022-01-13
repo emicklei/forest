@@ -47,8 +47,8 @@ func Dump(t T, resp *http.Response) {
 	buffer.WriteString("\n")
 	buffer.WriteString(fmt.Sprintf("%v %v\n", resp.Request.Method, resp.Request.URL))
 	for k, v := range resp.Request.Header {
-		if IsMaskedHeader(k) {
-			v = []string{strings.Repeat(MaskChar, len(v[0]))}
+		if IsMaskedHeader(k) && len(v) > 0 {
+			v = []string{maskedHeaderValue(v[0])}
 		}
 		if len(k) > 0 {
 			buffer.WriteString(fmt.Sprintf("%s : %v\n", k, strings.Join(v, ",")))
@@ -129,12 +129,17 @@ func headersString(h http.Header) string {
 	}
 	masked := http.Header{}
 	for k, v := range h {
-		if IsMaskedHeader(k) {
-			v = []string{strings.Repeat(MaskChar, len(v[0]))}
+		if IsMaskedHeader(k) && len(v) > 0 {
+			v = []string{maskedHeaderValue(v[0])}
 		}
 		masked[k] = v
 	}
 	return fmt.Sprintf("%v", masked)
+}
+
+func maskedHeaderValue(s string) string {
+	stars := strings.Repeat(MaskChar, 3)
+	return fmt.Sprintf("%s(masked %d chars)%s", stars, len(s), stars)
 }
 
 func copyHeaders(from, to http.Header) {

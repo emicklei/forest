@@ -1,5 +1,12 @@
 # change log of the forest package
 
+v1.4.2 [2022-01-13]
+
+- show count in masked headers
+- remove  NewTestingT
+- add graphql support
+- add cookie handling
+
 v1.2.0 [2021-06-15]
 
 - add support for GraphQL request
