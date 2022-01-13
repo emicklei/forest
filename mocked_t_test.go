@@ -17,3 +17,4 @@ func (m *mockedT) Fatal(args ...interface{}) {
 }
 func (m *mockedT) FailNow() {}
 func (m *mockedT) Fail()    {}
+func (m *mockedT) Helper()  {}

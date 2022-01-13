@@ -21,6 +21,8 @@ type RequestConfig struct {
 	FormData       url.Values
 	User, Password string
 	Cookies        []*http.Cookie
+	// for logging
+	logRequestLine bool
 }
 
 // Path is an alias for NewConfig
@@ -33,8 +35,9 @@ var NewRequestConfig = NewConfig
 // See Path for an explanation of the function parameters.
 func NewConfig(pathTemplate string, pathParams ...interface{}) *RequestConfig {
 	cfg := &RequestConfig{
-		HeaderMap: http.Header{},
-		Values:    url.Values{},
+		HeaderMap:      http.Header{},
+		Values:         url.Values{},
+		logRequestLine: true,
 	}
 	cfg.Path(pathTemplate, pathParams...)
 	return cfg
@@ -184,4 +187,9 @@ func (r *RequestConfig) Read(bodyReader io.Reader) *RequestConfig {
 func (r *RequestConfig) Form(bodyData url.Values) *RequestConfig {
 	r.FormData = bodyData
 	return r
+}
+
+// LogRequestLine controls whether each HTTP verb call is logging the request line (method + url)
+func (r *RequestConfig) LogRequestLine(b bool) {
+	r.logRequestLine = b
 }

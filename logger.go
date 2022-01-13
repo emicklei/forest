@@ -47,3 +47,5 @@ func (l Logger) FailNow() {
 
 // Fail marks the function as having failed but continues execution.
 func (l Logger) Fail() {}
+
+func (l Logger) Helper() {}

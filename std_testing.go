@@ -18,6 +18,7 @@ type T interface {
 	FailNow()
 	// Fail marks the function as having failed but continues execution.
 	Fail()
+	Helper()
 }
 
 // TestingT provides a sub-api of testing.T. Its purpose is to allow the use of this package in TestMain(m).

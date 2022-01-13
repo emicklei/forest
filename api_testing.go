@@ -1,6 +1,8 @@
 package forest
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // APITesting provides functions to call a REST api and validate its responses.
 type APITesting struct {
@@ -19,6 +21,7 @@ func NewClient(baseURL string, httpClient *http.Client) *APITesting {
 // GET sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
+	t.Helper()
 	httpReq, err := http.NewRequest("GET", a.BaseURL+config.pathAndQuery(), nil)
 	if err != nil {
 		logfatal(t, sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
@@ -27,7 +30,9 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
-	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	if config.logRequestLine {
+		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return ensureResponse(httpReq, resp)
@@ -36,6 +41,7 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 // POST sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
+	t.Helper()
 	httpReq, err := http.NewRequest("POST", a.BaseURL+config.pathAndQuery(), config.BodyReader)
 	if err != nil {
 		logfatal(t, sfatalf("POST: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
@@ -44,7 +50,9 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
-	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	if config.logRequestLine {
+		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return ensureResponse(httpReq, resp)
@@ -61,7 +69,9 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
-	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	if config.logRequestLine {
+		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return ensureResponse(httpReq, resp)
@@ -78,7 +88,9 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
-	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	if config.logRequestLine {
+		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return ensureResponse(httpReq, resp)
@@ -95,7 +107,9 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 	setCookies(config, httpReq)
 	copyHeaders(config.HeaderMap, httpReq.Header)
 	setFormData(config, httpReq)
-	Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	if config.logRequestLine {
+		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
+	}
 	resp, err := a.client.Do(httpReq)
 	CheckError(t, err)
 	return ensureResponse(httpReq, resp)
