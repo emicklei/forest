@@ -34,7 +34,7 @@ If needed, implement the standard TestMain to do global setup and teardown.
 
 	func TestMain(m *testing.M) {
 		// there is no *testing.T available, use an stdout implementation
-		t := forest.NewTestingT()
+		t := forest.TestingT
 
 		// setup
 		chatter.PUT(t, forest.Path("/v1/messages/{id}",1).Body("<payload>"))
