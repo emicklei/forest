@@ -11,13 +11,14 @@ type Map map[string]interface{}
 
 // GraphQLRequest is used to model both a query or a mutation request
 type GraphQLRequest struct {
-	Query         string                 `json:"query"`
+	Query         string                 `json:"query,omitempty"`
+	Mutation      string                 `json:"mutation,omitempty"`
 	OperationName string                 `json:"operationName"`
 	Variables     map[string]interface{} `json:"variables"`
 }
 
-// NewGraphQLRequest returns a new Request without any variables.
-func NewGraphQLRequest(query, operation string) (GraphQLRequest, error) {
+// NewGraphQLQuery returns a new Request without any variables.
+func NewGraphQLQuery(query, operation string) (GraphQLRequest, error) {
 	if query == "" {
 		return GraphQLRequest{}, errors.New("query parameter cannot be empty")
 	}
@@ -25,6 +26,17 @@ func NewGraphQLRequest(query, operation string) (GraphQLRequest, error) {
 		return GraphQLRequest{}, errors.New("operation parameter cannot be empty")
 	}
 	return GraphQLRequest{Query: query, OperationName: operation, Variables: map[string]interface{}{}}, nil
+}
+
+// NewGraphQLMutation returns a new Request without any variables.
+func NewGraphQLMutation(mutation, operation string) (GraphQLRequest, error) {
+	if mutation == "" {
+		return GraphQLRequest{}, errors.New("mutation parameter cannot be empty")
+	}
+	if operation == "" {
+		return GraphQLRequest{}, errors.New("operation parameter cannot be empty")
+	}
+	return GraphQLRequest{Mutation: mutation, OperationName: operation, Variables: map[string]interface{}{}}, nil
 }
 
 // WithVariablesFromString returns a copy of the request with decoded variables. Returns an error if the jsonhash cannot be converted.
