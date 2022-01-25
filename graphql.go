@@ -3,7 +3,6 @@ package forest
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 )
 
@@ -18,25 +17,13 @@ type GraphQLRequest struct {
 }
 
 // NewGraphQLQuery returns a new Request without any variables.
-func NewGraphQLQuery(query, operation string) (GraphQLRequest, error) {
-	if query == "" {
-		return GraphQLRequest{}, errors.New("query parameter cannot be empty")
-	}
-	if operation == "" {
-		return GraphQLRequest{}, errors.New("operation parameter cannot be empty")
-	}
-	return GraphQLRequest{Query: query, OperationName: operation, Variables: map[string]interface{}{}}, nil
+func NewGraphQLQuery(query, operation string) GraphQLRequest {
+	return GraphQLRequest{Query: query, OperationName: operation, Variables: map[string]interface{}{}}
 }
 
 // NewGraphQLMutation returns a new Request without any variables.
-func NewGraphQLMutation(mutation, operation string) (GraphQLRequest, error) {
-	if mutation == "" {
-		return GraphQLRequest{}, errors.New("mutation parameter cannot be empty")
-	}
-	if operation == "" {
-		return GraphQLRequest{}, errors.New("operation parameter cannot be empty")
-	}
-	return GraphQLRequest{Mutation: mutation, OperationName: operation, Variables: map[string]interface{}{}}, nil
+func NewGraphQLMutation(mutation, operation string) GraphQLRequest {
+	return GraphQLRequest{Mutation: mutation, OperationName: operation, Variables: map[string]interface{}{}}
 }
 
 // WithVariablesFromString returns a copy of the request with decoded variables. Returns an error if the jsonhash cannot be converted.

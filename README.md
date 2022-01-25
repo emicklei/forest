@@ -32,8 +32,7 @@ functional tests that call a running REST based WebService.
 
 ## graphql support
 
-	query, err := forest.NewGraphQLQuery(list_matrices_query, "ListMatrices")
-	// ... handle error
+	query := forest.NewGraphQLQuery(list_matrices_query, "ListMatrices")
 	query, err = query.WithVariablesFromString(`
 {
 	"repositoryID":"99426e24-..........-6bf9770f1fd5",
