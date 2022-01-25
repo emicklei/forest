@@ -1,5 +1,11 @@
 # change log of the forest package
 
+v1.5.0 [2022-01-25]
+
+- graphql support
+- optional request line logging
+- fix line nr in log
+
 v1.4.2 [2022-01-13]
 
 - show count in masked headers
