@@ -16,8 +16,12 @@ type GraphQLRequest struct {
 }
 
 // NewGraphQLRequest returns a new Request (for query or mutation) without any variables.
-func NewGraphQLRequest(query, operation string) GraphQLRequest {
-	return GraphQLRequest{Query: query, OperationName: operation, Variables: map[string]interface{}{}}
+func NewGraphQLRequest(query, operation string, vars ...Map) GraphQLRequest {
+	initVars := map[string]interface{}{}
+	if len(vars) > 0 {
+		initVars = vars[0] // merge all?
+	}
+	return GraphQLRequest{Query: query, OperationName: operation, Variables: initVars}
 }
 
 // WithVariablesFromString returns a copy of the request with decoded variables. Returns an error if the jsonhash cannot be converted.
