@@ -193,3 +193,16 @@ func (r *RequestConfig) Form(bodyData url.Values) *RequestConfig {
 func (r *RequestConfig) LogRequestLine(b bool) {
 	r.logRequestLine = b
 }
+
+// Build returns a new HTTP Request.
+func (r *RequestConfig) Build(method, baseURL string) (*http.Request, error) {
+	httpReq, err := http.NewRequest(method, baseURL+r.pathAndQuery(), r.BodyReader)
+	if err != nil {
+		return nil, err
+	}
+	setBasicAuth(r, httpReq)
+	setCookies(r, httpReq)
+	copyHeaders(r.HeaderMap, httpReq.Header)
+	setFormData(r, httpReq)
+	return httpReq, nil
+}
