@@ -22,14 +22,10 @@ func NewClient(baseURL string, httpClient *http.Client) *APITesting {
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	t.Helper()
-	httpReq, err := http.NewRequest("GET", a.BaseURL+config.pathAndQuery(), nil)
+	httpReq, err := config.Build(http.MethodGet, a.BaseURL)
 	if err != nil {
 		logfatal(t, sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
@@ -42,14 +38,10 @@ func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	t.Helper()
-	httpReq, err := http.NewRequest("POST", a.BaseURL+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := config.Build(http.MethodPost, a.BaseURL)
 	if err != nil {
 		logfatal(t, sfatalf("POST: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
@@ -61,14 +53,10 @@ func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 // PUT sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("PUT", a.BaseURL+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := config.Build(http.MethodPut, a.BaseURL)
 	if err != nil {
 		logfatal(t, sfatalf("PUT: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
@@ -80,14 +68,10 @@ func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
 // DELETE sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("DELETE", a.BaseURL+config.pathAndQuery(), nil)
+	httpReq, err := config.Build(http.MethodDelete, a.BaseURL)
 	if err != nil {
 		logfatal(t, sfatalf("DELETE: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
@@ -99,14 +83,10 @@ func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
 // PATCH sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
-	httpReq, err := http.NewRequest("PATCH", a.BaseURL+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := config.Build(http.MethodPatch, a.BaseURL)
 	if err != nil {
 		logfatal(t, sfatalf("PATCH: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
 	}
@@ -118,14 +98,10 @@ func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
 // Do sends a Http request using a Http method (GET,PUT,POST,....) and config (headers,...)
 // The request is not logged and any URL build error or send error will be returned.
 func (a *APITesting) Do(method string, config *RequestConfig) (*http.Response, error) {
-	httpReq, err := http.NewRequest(method, a.BaseURL+config.pathAndQuery(), config.BodyReader)
+	httpReq, err := config.Build(method, a.BaseURL)
 	if err != nil {
 		return nil, err
 	}
-	setBasicAuth(config, httpReq)
-	setCookies(config, httpReq)
-	copyHeaders(config.HeaderMap, httpReq.Header)
-	setFormData(config, httpReq)
 	resp, err := a.client.Do(httpReq)
 	return ensureResponse(httpReq, resp), err
 }
