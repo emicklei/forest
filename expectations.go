@@ -28,7 +28,7 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 		if verboseOnFailure {
 			Dump(t, r)
 		}
-		logfatal(t, serrorf("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
+		logerror(t, serrorf("ExpectStatus: got status %d but want %d, %s %v", r.StatusCode, status, r.Request.Method, r.Request.URL))
 		return false
 	}
 	return true
