@@ -1,5 +1,9 @@
 # change log of the forest package
 
+v1.6.0 [2022-02-12]
+
+- ExpectStatus no longer exits the test (fatal -> error)
+
 v1.5.0 [2022-01-25]
 
 - graphql support
