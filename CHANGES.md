@@ -1,5 +1,9 @@
 # change log of the forest package
 
+v1.7.0 [2022-02-17]
+
+- Add JUnit report (XML) reader.  Usable with [gotestsum](https://github.com/gotestyourself/gotestsum)
+
 v1.6.0 [2022-02-12]
 
 - ExpectStatus no longer exits the test (fatal -> error)

@@ -1,0 +1,72 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite tests="0" failures="0" time="0.000000" name="skills-systemtests" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="1" failures="0" time="0.310000" name="skills-systemtests/aboutskills" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/aboutskills" name="TestServerPoolWorkerQuery" time="0.310000"></testcase>
+	</testsuite>
+	<testsuite tests="2" failures="1" time="1.100000" name="skills-systemtests/approvals" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/approvals" name="TestExistingAssessmentRequest" time="0.130000">
+			<failure message="Failed" type="">fdsafdsafdsafdsa</failure>
+		</testcase>
+		<testcase classname="skills-systemtests/approvals" name="TestCreateAssessments" time="0.970000"></testcase>
+	</testsuite>
+	<testsuite tests="1" failures="0" time="0.220000" name="skills-systemtests/employments" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/employments" name="TestGetEmployments" time="0.220000"></testcase>
+	</testsuite>
+	<testsuite tests="2" failures="0" time="1.350000" name="skills-systemtests/groupings" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/groupings" name="TestManageGrouping" time="1.190000"></testcase>
+		<testcase classname="skills-systemtests/groupings" name="TestRepositoryFirstPritSheetID" time="0.160000"></testcase>
+	</testsuite>
+	<testsuite tests="1" failures="0" time="0.660000" name="skills-systemtests/matrices" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/matrices" name="TestListMatrices" time="0.660000"></testcase>
+	</testsuite>
+	<testsuite tests="3" failures="1" time="2.370000" name="skills-systemtests/qualifications" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/qualifications" name="TestAddRemoveQualifcation" time="1.690000">
+			<failure message="Failed" type="">....stack....info....</failure>
+		</testcase>
+		<testcase classname="skills-systemtests/qualifications" name="TestListQualifications" time="0.080000"></testcase>
+		<testcase classname="skills-systemtests/qualifications" name="TestCreateQualificationCatalog" time="0.600000"></testcase>
+	</testsuite>
+	<testsuite tests="1" failures="0" time="0.000000" name="skills-systemtests/shared" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/shared" name="TestGetRepositories" time="0.000000">
+			<skipped message="fdsafdsafdsafdsafdsa"></skipped>
+		</testcase>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="skills-systemtests/shared/ptr" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="1" failures="0" time="0.550000" name="skills-systemtests/skills" timestamp="2022-02-17T08:59:19Z">
+		<properties>
+			<property name="go.version" value="go1.16.4 linux/amd64"></property>
+		</properties>
+		<testcase classname="skills-systemtests/skills" name="TestEmploymentSkillsQuery" time="0.550000"></testcase>
+	</testsuite>
+</testsuites>
