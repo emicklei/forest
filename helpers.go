@@ -3,6 +3,7 @@ package forest
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -57,7 +58,7 @@ func Dump(t T, resp *http.Response) {
 	// dump request payload, only available is there is a Body.
 	if resp != nil && resp.Request != nil && resp.Request.Body != nil {
 		rc, _ := resp.Request.GetBody()
-		body, err := ioutil.ReadAll(rc)
+		body, err := io.ReadAll(rc)
 		if err != nil {
 			buffer.WriteString(fmt.Sprintf("unable to read request body:%v", err))
 		} else {
@@ -110,7 +111,6 @@ type skippeable interface {
 // SkipUnless will Skip the test unless the LABELS environment variable includes any of the provided labels.
 //
 //	LABELS=integration,nightly go test -v
-//
 func SkipUnless(t skippeable, labels ...string) {
 	env := strings.Split(os.Getenv("LABELS"), ",")
 	for _, each := range labels {

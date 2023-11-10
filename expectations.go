@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,6 +21,7 @@ func VerboseOnFailure(verbose bool) {
 // If the value is not expected, the complete request, response is logged (iff verboseOnFailure) and the test is aborted.
 // Return true if the status is as expected.
 func ExpectStatus(t T, r *http.Response, status int) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectStatus: got nil but want Http response"))
 		return false
@@ -47,6 +49,7 @@ func CheckError(t T, err error) bool {
 // ExpectHeader inspects the header of the response.
 // Return true if the header matches.
 func ExpectHeader(t T, r *http.Response, name, value string) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectHeader: got nil but want a Http response"))
 		return false
@@ -62,6 +65,7 @@ func ExpectHeader(t T, r *http.Response, name, value string) bool {
 // Fail if the body could not be read or if unmarshalling was not possible.
 // Returns true if the callback was executed with a map.
 func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interface{})) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectJSONHash: no response available"))
 		return false
@@ -99,6 +103,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 // Fail if the body could not be read or if unmarshalling was not possible.
 // Returns true if the callback was executed with an array.
 func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectJSONArray: no response available"))
 		return false
@@ -117,7 +122,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		return false
 	}
 	// put the body back for re-reads
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
+	r.Body = io.NopCloser(bytes.NewReader(data))
 
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
@@ -136,6 +141,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 // Fail if the body could not be read or unmarshalled.
 // Returns true if a response body was read.
 func ExpectString(t T, r *http.Response, callback func(content string)) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectString: no response available"))
 		return false
@@ -164,6 +170,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 // Fail if the body could not be read or unmarshalled.
 // Returns true if a document could be unmarshalled.
 func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectXMLDocument: no response available"))
 		return false
@@ -198,6 +205,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 // Fail if the body could not be read or unmarshalled.
 // Returns true if a document could be unmarshalled.
 func ExpectJSONDocument(t T, r *http.Response, doc interface{}) bool {
+	t.Helper()
 	if r == nil {
 		logerror(t, serrorf("ExpectJSONDocument: no response available"))
 		return false

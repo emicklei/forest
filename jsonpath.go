@@ -9,6 +9,7 @@ import (
 // JSONPath returns the value found by following the dotted path in a JSON document hash.
 // E.g .chapters.0.title in  { "chapters" : [{"title":"Go a long way"}] }
 func JSONPath(t T, r *http.Response, dottedPath string) interface{} {
+	t.Helper()
 	var value interface{}
 	ExpectJSONHash(t, r, func(doc map[string]interface{}) {
 		value = pathFindIn(0, strings.Split(dottedPath, ".")[1:], doc)
@@ -19,6 +20,7 @@ func JSONPath(t T, r *http.Response, dottedPath string) interface{} {
 // JSONArrayPath returns the value found by following the dotted path in a JSON array.
 // E.g .1.title in  [ {"title":"Go a long way"}, {"title":"scary scala"} ]
 func JSONArrayPath(t T, r *http.Response, dottedPath string) interface{} {
+	t.Helper()
 	var value interface{}
 	ExpectJSONArray(t, r, func(list []interface{}) {
 		value = pathFindIn(0, strings.Split(dottedPath, ".")[1:], list)
