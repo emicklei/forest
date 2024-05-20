@@ -32,6 +32,7 @@ functional tests that call a running REST based WebService.
 
 ## graphql support
 
+```
 	query := forest.NewGraphQLRequest(list_matrices_query, "ListMatrices")
 	query, err = query.WithVariablesFromString(`
 {
@@ -45,6 +46,7 @@ functional tests that call a running REST based WebService.
 	cfg.Content(query, "application/json")
 	r := SkillsAPI.POST(t, cfg)
 	ExpectStatus(t, r, 200)
+```
 
 ## other helper functions
 
