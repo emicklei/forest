@@ -38,7 +38,18 @@ func (r GraphQLRequest) WithVariablesFromString(jsonhash string) (GraphQLRequest
 }
 
 // Reader returns a new reader for sending it using a HTTP request.
-func (r GraphQLRequest) Reader() (io.Reader, error) {
+// Deprecated: Use ReaderWithError() to handle errors.
+func (r GraphQLRequest) Reader() io.Reader {
+	reader, err := r.ReaderWithError()
+	if err != nil {
+		// For backward compatibility, panic on error.
+		panic(err)
+	}
+	return reader
+}
+
+// ReaderWithError returns a new reader for sending it using a HTTP request, and returns an error if marshalling fails.
+func (r GraphQLRequest) ReaderWithError() (io.Reader, error) {
 	data, err := json.Marshal(r)
 	if err != nil {
 		return nil, err
