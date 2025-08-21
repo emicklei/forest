@@ -21,7 +21,6 @@ func NewClient(baseURL string, httpClient *http.Client) *APITesting {
 // GET sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 // GET sends a Http request using a config (headers,...)
-// The request is logged and any sending error will fail the test.
 func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	t.Helper()
 	return a.doRequest(t, http.MethodGet, config)
