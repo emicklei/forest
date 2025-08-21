@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"text/template"
 )
 
 func TestDump(t *testing.T) {
@@ -11,6 +12,21 @@ func TestDump(t *testing.T) {
 	Dump(t, r)
 	// check if we can read it again
 	Dump(t, r)
+}
+
+func TestDumpTemplate(t *testing.T) {
+	// backup and restore
+	old := DumpTemplate
+	defer func() {
+		DumpTemplate = old
+	}()
+	DumpTemplate = template.Must(template.New("dump").Parse("Method:{{.Request.Method}}"))
+	r := tsAPI.GET(t, NewConfig("/jsonarray"))
+	mock := new(mockedT)
+	Dump(mock, r)
+	if "Method:GET" != mock.logMessage {
+		t.Errorf("got %q want %q", mock.logMessage, "Method:GET")
+	}
 }
 
 type skipper struct {
