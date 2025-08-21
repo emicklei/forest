@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"text/template"
 )
 
 // maskHeaderNames is used to prevent logging secrets.
@@ -15,6 +16,10 @@ var maskHeaderNames = []string{}
 
 // MaskChar is used the create a masked header value.
 var MaskChar = "*"
+
+// MaskingFunc is the function used to mask a header value.
+// If nil then the default masking is applied.
+var MaskingFunc func(value string) string
 
 // MaskHeader is used to prevent logging secrets.
 func MaskHeader(name string) {
@@ -41,8 +46,38 @@ func CookieNamed(resp *http.Response, name string) *http.Cookie {
 	return nil
 }
 
+// DumpTemplate is the template used to dump request and response information.
+// If nil then the default dump format is used.
+var DumpTemplate *template.Template
+
+// DumpData is the structure passed to the DumpTemplate.
+type DumpData struct {
+	Request  *http.Request
+	Response *http.Response
+	Body     string
+}
+
 // Dump is a convenient method to log the full contents of a request and its response.
 func Dump(t T, resp *http.Response) {
+	if DumpTemplate != nil {
+		body, err := readAndRestoreBody(resp)
+		if err != nil {
+			// ignore error, dump what we have
+		}
+		var buffer bytes.Buffer
+		err = DumpTemplate.Execute(&buffer, DumpData{
+			Request:  resp.Request,
+			Response: resp,
+			Body:     string(body),
+		})
+		if err != nil {
+			logerror(t, serrorf("dump template failed:%v", err))
+			return
+		}
+		Logf(t, buffer.String())
+		return
+	}
+	// default dump
 	// dump request
 	var buffer bytes.Buffer
 	buffer.WriteString("\n")
@@ -82,7 +117,7 @@ func Dump(t T, resp *http.Response) {
 		}
 	}
 	if resp.Body != nil {
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := readAndRestoreBody(resp)
 		if err != nil {
 			if resp.StatusCode/100 == 3 {
 				// redirect closes body ; nothing to read
@@ -96,12 +131,25 @@ func Dump(t T, resp *http.Response) {
 			}
 			buffer.WriteString(string(body))
 		}
-		resp.Body.Close()
-		// put the body back for re-reads
-		resp.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
 	buffer.WriteString("\n")
 	Logf(t, "%s", buffer.String())
+}
+
+// readAndRestoreBody reads the content of the response body and puts it back for re-reads.
+// Be aware that this is not a memory-friendly operation.
+func readAndRestoreBody(r *http.Response) ([]byte, error) {
+	if r.Body == nil {
+		return nil, nil
+	}
+	data, err := ioutil.ReadAll(r.Body)
+	r.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	// put the body back for re-reads
+	r.Body = ioutil.NopCloser(bytes.NewReader(data))
+	return data, nil
 }
 
 type skippeable interface {
@@ -138,6 +186,9 @@ func headersString(h http.Header) string {
 }
 
 func maskedHeaderValue(s string) string {
+	if MaskingFunc != nil {
+		return MaskingFunc(s)
+	}
 	stars := strings.Repeat(MaskChar, 3)
 	return fmt.Sprintf("%s(masked %d chars)%s", stars, len(s), stars)
 }

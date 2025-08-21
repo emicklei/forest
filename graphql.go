@@ -18,8 +18,10 @@ type GraphQLRequest struct {
 // NewGraphQLRequest returns a new Request (for query or mutation) without any variables.
 func NewGraphQLRequest(query, operation string, vars ...Map) GraphQLRequest {
 	initVars := map[string]interface{}{}
-	if len(vars) > 0 {
-		initVars = vars[0] // merge all?
+	for _, each := range vars {
+		for k, v := range each {
+			initVars[k] = v
+		}
 	}
 	return GraphQLRequest{Query: query, OperationName: operation, Variables: initVars}
 }
@@ -36,7 +38,10 @@ func (r GraphQLRequest) WithVariablesFromString(jsonhash string) (GraphQLRequest
 }
 
 // Reader returns a new reader for sending it using a HTTP request.
-func (r GraphQLRequest) Reader() io.Reader {
-	data, _ := json.Marshal(r)
-	return bytes.NewReader(data)
+func (r GraphQLRequest) Reader() (io.Reader, error) {
+	data, err := json.Marshal(r)
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(data), nil
 }

@@ -16,7 +16,11 @@ func ExampleJSONArrayPath() {
 	// { "id" : "artreyu", "type" : "tool" }
 	// ]
 	// then you can verify it using
-	if got, want := JSONArrayPath(t, r, ".0.type"), "tool"; got != want {
+	got, ok := JSONArrayPath(t, r, ".0.type")
+	if !ok {
+		t.Fatal("path not found")
+	}
+	if want := "tool"; got != want {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
@@ -30,7 +34,11 @@ func ExampleJSONPath() {
 	// if the content looks like this
 	// { "id" : "artreyu", "type" : "tool" }
 	// then you can verify it using
-	if got, want := JSONPath(t, r, ".0.id"), "artreyu"; got != want {
+	got, ok := JSONPath(t, r, ".id")
+	if !ok {
+		t.Fatal("path not found")
+	}
+	if want := "artreyu"; got != want {
 		t.Errorf("got %v want %v", got, want)
 	}
 }

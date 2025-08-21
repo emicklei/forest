@@ -1,50 +1,55 @@
 package forest
 
 import (
-	"strings"
 	"testing"
 )
 
 func TestJSONPath(t *testing.T) {
 	r := tsAPI.GET(t, NewConfig("/json-nested-doc"))
-	if v := JSONPath(t, r, ".Root.Child"); v != 12.0 {
+	v, ok := JSONPath(t, r, "$.Root.Child")
+	if !ok || v != 12.0 {
 		t.Errorf("got %v (%T) want 12.0", v, v)
 	}
 }
 
 func TestJSONArrayPath(t *testing.T) {
 	r := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
-	if v := JSONArrayPath(t, r, ".1.digit"); v != 2.0 {
+	v, ok := JSONArrayPath(t, r, "$[1].digit")
+	if !ok || v != 2.0 {
 		t.Errorf("got %v (%T) want 2.0", v, v)
 	}
 }
 
-func TestJSONPathRoot(t *testing.T) {
-	src := map[string]interface{}{
-		"key": "value",
-		"nested": map[string]interface{}{
-			"sub": "super",
-		},
-		"kids": []interface{}{
-			map[string]interface{}{"name": "dennis"},
-			map[string]interface{}{"name": "lisa"},
-		},
+func TestMustJSONPath(t *testing.T) {
+	r := tsAPI.GET(t, NewConfig("/json-nested-doc"))
+	if v := MustJSONPath(t, r, "$.Root.Child"); v != 12.0 {
+		t.Errorf("got %v (%T) want 12.0", v, v)
 	}
-	found := pathFindIn(0, strings.Split(".", ".")[1:], src)
-	if found == nil {
-		t.Errorf("expected root document, got:%v", found)
-	}
-	found = pathFindIn(0, strings.Split(".key", ".")[1:], src)
-	if found != "value" {
-		t.Errorf("expected value, got:%v", found)
-	}
-	found = pathFindIn(0, strings.Split(".nested.sub", ".")[1:], src)
-	if found != "super" {
-		t.Errorf("expected super, got:%v", found)
-	}
-	found = pathFindIn(0, strings.Split(".kids.1.name", ".")[1:], src)
-	if found != "lisa" {
-		t.Errorf("expected lisa, got:%v", found)
-	}
+}
 
+func TestMustJSONArrayPath(t *testing.T) {
+	r := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
+	if v := MustJSONArrayPath(t, r, "$[1].digit"); v != 2.0 {
+		t.Errorf("got %v (%T) want 2.0", v, v)
+	}
+}
+
+func TestMustJSONPathPanics(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	r := tsAPI.GET(t, NewConfig("/json-nested-doc"))
+	MustJSONPath(t, r, "$.Root.Invalid")
+}
+
+func TestMustJSONArrayPathPanics(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	r := tsAPI.GET(t, NewConfig("/json-array-of-doc"))
+	MustJSONArrayPath(t, r, "$[2].digit")
 }

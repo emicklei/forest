@@ -1,11 +1,8 @@
 package forest
 
 import (
-	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -41,6 +38,9 @@ func ExpectStatus(t T, r *http.Response, status int) bool {
 // Return true if there was an error.
 func CheckError(t T, err error) bool {
 	if err != nil {
+		if verboseOnFailure {
+			// there is no response to dump
+		}
 		logerror(t, serrorf("CheckError: did not expect to receive err: %v", err))
 	}
 	return err != nil
@@ -56,6 +56,9 @@ func ExpectHeader(t T, r *http.Response, name, value string) bool {
 	}
 	rname := r.Header.Get(name)
 	if rname != value {
+		if verboseOnFailure {
+			Dump(t, r)
+		}
 		logerror(t, serrorf("ExpectHeader: got header %s=%s but want %s", name, rname, value))
 	}
 	return rname == value
@@ -70,12 +73,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		logerror(t, serrorf("ExpectJSONHash: no response available"))
 		return false
 	}
-	if r.Body == nil {
-		logerror(t, serrorf("ExpectJSONHash: no body to read"))
-		return false
-	}
-	data, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	data, err := readAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -83,9 +81,6 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		logerror(t, serrorf("ExpectJSONHash: unable to read response body:%v", err))
 		return false
 	}
-	// put the body back for re-reads
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
-
 	dict := map[string]interface{}{}
 	err = json.Unmarshal(data, &dict)
 	if err != nil {
@@ -108,12 +103,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		logerror(t, serrorf("ExpectJSONArray: no response available"))
 		return false
 	}
-	if r.Body == nil {
-		logerror(t, serrorf("ExpectJSONArray: no body to read"))
-		return false
-	}
-	data, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	data, err := readAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -121,9 +111,6 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		logerror(t, serrorf("ExpectJSONArray: unable to read response body:%v", err))
 		return false
 	}
-	// put the body back for re-reads
-	r.Body = io.NopCloser(bytes.NewReader(data))
-
 	slice := []interface{}{}
 	err = json.Unmarshal(data, &slice)
 	if err != nil {
@@ -146,12 +133,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 		logerror(t, serrorf("ExpectString: no response available"))
 		return false
 	}
-	if r.Body == nil {
-		logerror(t, serrorf("ExpectString: no body to read"))
-		return false
-	}
-	data, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	data, err := readAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -159,9 +141,6 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 		logerror(t, serrorf("ExpectString: unable to read response body:%v", err))
 		return false
 	}
-	// put the body back for re-reads
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
-
 	callback(string(data))
 	return true
 }
@@ -175,12 +154,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 		logerror(t, serrorf("ExpectXMLDocument: no response available"))
 		return false
 	}
-	if r.Body == nil {
-		logerror(t, serrorf("ExpectXMLDocument: no body to read"))
-		return false
-	}
-	data, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	data, err := readAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -188,9 +162,6 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 		logerror(t, serrorf("ExpectXMLDocument: unable to read response body:%v", err))
 		return false
 	}
-	// put the body back for re-reads
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
-
 	err = xml.Unmarshal(data, doc)
 	if err != nil {
 		if verboseOnFailure {
@@ -210,19 +181,11 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) bool {
 		logerror(t, serrorf("ExpectJSONDocument: no response available"))
 		return false
 	}
-	if r.Body == nil {
-		logerror(t, serrorf("ExpectJSONDocument: no body to read"))
-		return false
-	}
-	data, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	data, err := readAndRestoreBody(r)
 	if err != nil {
 		logerror(t, serrorf("ExpectJSONDocument: unable to read response body :%v", err))
 		return false
 	}
-	// put the body back for re-reads
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
-
 	err = json.Unmarshal(data, doc)
 	if err != nil {
 		if verboseOnFailure {

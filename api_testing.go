@@ -20,72 +20,46 @@ func NewClient(baseURL string, httpClient *http.Client) *APITesting {
 
 // GET sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
+// GET sends a Http request using a config (headers,...)
+// The request is logged and any sending error will fail the test.
 func (a *APITesting) GET(t T, config *RequestConfig) *http.Response {
 	t.Helper()
-	httpReq, err := config.Build(http.MethodGet, a.BaseURL)
-	if err != nil {
-		logfatal(t, sfatalf("GET: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
-	}
-	if config.logRequestLine {
-		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
-	}
-	resp, err := a.client.Do(httpReq)
-	CheckError(t, err)
-	return ensureResponse(httpReq, resp)
+	return a.doRequest(t, http.MethodGet, config)
 }
 
 // POST sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) POST(t T, config *RequestConfig) *http.Response {
 	t.Helper()
-	httpReq, err := config.Build(http.MethodPost, a.BaseURL)
-	if err != nil {
-		logfatal(t, sfatalf("POST: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
-	}
-	if config.logRequestLine {
-		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
-	}
-	resp, err := a.client.Do(httpReq)
-	CheckError(t, err)
-	return ensureResponse(httpReq, resp)
+	return a.doRequest(t, http.MethodPost, config)
 }
 
 // PUT sends a Http request using a config (headers,body,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) PUT(t T, config *RequestConfig) *http.Response {
-	httpReq, err := config.Build(http.MethodPut, a.BaseURL)
-	if err != nil {
-		logfatal(t, sfatalf("PUT: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
-	}
-	if config.logRequestLine {
-		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
-	}
-	resp, err := a.client.Do(httpReq)
-	CheckError(t, err)
-	return ensureResponse(httpReq, resp)
+	t.Helper()
+	return a.doRequest(t, http.MethodPut, config)
 }
 
 // DELETE sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) DELETE(t T, config *RequestConfig) *http.Response {
-	httpReq, err := config.Build(http.MethodDelete, a.BaseURL)
-	if err != nil {
-		logfatal(t, sfatalf("DELETE: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
-	}
-	if config.logRequestLine {
-		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
-	}
-	resp, err := a.client.Do(httpReq)
-	CheckError(t, err)
-	return ensureResponse(httpReq, resp)
+	t.Helper()
+	return a.doRequest(t, http.MethodDelete, config)
 }
 
 // PATCH sends a Http request using a config (headers,...)
 // The request is logged and any sending error will fail the test.
 func (a *APITesting) PATCH(t T, config *RequestConfig) *http.Response {
-	httpReq, err := config.Build(http.MethodPatch, a.BaseURL)
+	t.Helper()
+	return a.doRequest(t, http.MethodPatch, config)
+}
+
+func (a *APITesting) doRequest(t T, method string, config *RequestConfig) *http.Response {
+	t.Helper()
+	httpReq, err := config.Build(method, a.BaseURL)
 	if err != nil {
-		logfatal(t, sfatalf("PATCH: invalid Url:%s", a.BaseURL+config.pathAndQuery()))
+		logfatal(t, sfatalf("%s: invalid Url:%s", method, a.BaseURL+config.pathAndQuery()))
 	}
 	if config.logRequestLine {
 		Logf(t, "\n%v %v %v", httpReq.Method, httpReq.URL, headersString(httpReq.Header))
