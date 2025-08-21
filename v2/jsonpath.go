@@ -42,7 +42,7 @@ func MustJSONPath(t forest.T, r *http.Response, path string) interface{} {
 	t.Helper()
 	val, ok := JSONPath(t, r, path)
 	if !ok {
-		panic("JSONPath not found:" + path)
+		panic("JSONPath not found: " + path)
 	}
 	return val
 }
