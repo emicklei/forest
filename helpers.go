@@ -60,7 +60,7 @@ type DumpData struct {
 // Dump is a convenient method to log the full contents of a request and its response.
 func Dump(t T, resp *http.Response) {
 	if DumpTemplate != nil {
-		body, err := readAndRestoreBody(resp)
+		body, err := ReadAndRestoreBody(resp)
 		if err != nil {
 			// ignore error, dump what we have
 		}
@@ -117,7 +117,7 @@ func Dump(t T, resp *http.Response) {
 		}
 	}
 	if resp.Body != nil {
-		body, err := readAndRestoreBody(resp)
+		body, err := ReadAndRestoreBody(resp)
 		if err != nil {
 			if resp.StatusCode/100 == 3 {
 				// redirect closes body ; nothing to read
@@ -136,9 +136,9 @@ func Dump(t T, resp *http.Response) {
 	Logf(t, "%s", buffer.String())
 }
 
-// readAndRestoreBody reads the content of the response body and puts it back for re-reads.
+// ReadAndRestoreBody reads the content of the response body and puts it back for re-reads.
 // Be aware that this is not a memory-friendly operation.
-func readAndRestoreBody(r *http.Response) ([]byte, error) {
+func ReadAndRestoreBody(r *http.Response) ([]byte, error) {
 	if r.Body == nil {
 		return nil, nil
 	}

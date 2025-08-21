@@ -73,7 +73,7 @@ func ExpectJSONHash(t T, r *http.Response, callback func(hash map[string]interfa
 		logerror(t, serrorf("ExpectJSONHash: no response available"))
 		return false
 	}
-	data, err := readAndRestoreBody(r)
+	data, err := ReadAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -103,7 +103,7 @@ func ExpectJSONArray(t T, r *http.Response, callback func(array []interface{})) 
 		logerror(t, serrorf("ExpectJSONArray: no response available"))
 		return false
 	}
-	data, err := readAndRestoreBody(r)
+	data, err := ReadAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -133,7 +133,7 @@ func ExpectString(t T, r *http.Response, callback func(content string)) bool {
 		logerror(t, serrorf("ExpectString: no response available"))
 		return false
 	}
-	data, err := readAndRestoreBody(r)
+	data, err := ReadAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -154,7 +154,7 @@ func ExpectXMLDocument(t T, r *http.Response, doc interface{}) bool {
 		logerror(t, serrorf("ExpectXMLDocument: no response available"))
 		return false
 	}
-	data, err := readAndRestoreBody(r)
+	data, err := ReadAndRestoreBody(r)
 	if err != nil {
 		if verboseOnFailure {
 			Dump(t, r)
@@ -181,7 +181,7 @@ func ExpectJSONDocument(t T, r *http.Response, doc interface{}) bool {
 		logerror(t, serrorf("ExpectJSONDocument: no response available"))
 		return false
 	}
-	data, err := readAndRestoreBody(r)
+	data, err := ReadAndRestoreBody(r)
 	if err != nil {
 		logerror(t, serrorf("ExpectJSONDocument: unable to read response body :%v", err))
 		return false
