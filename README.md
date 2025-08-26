@@ -80,6 +80,6 @@ The `GraphQLRequest` can be used to construct a request for a GraphQL endpoint.
 
 ## more docs
 
-[Introduction Blog Post](http.ernestmicklei.com/2015/07/testing-your-rest-api-in-go-with-forest/)
+[Introduction Blog Post](https://ernestmicklei.com/2015/07/testing-your-rest-api-in-go-with-forest/)
 
-© 2016+, http://ernestmicklei.com. MIT License. Contributions welcome.
+© 2016-2025, https://ernestmicklei.com. MIT License. Contributions welcome.
